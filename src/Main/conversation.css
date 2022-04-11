@@ -1,0 +1,7 @@
+.conversation:hover {
+    cursor: pointer;
+}
+
+.listing-container {
+    width: 100%;
+}
