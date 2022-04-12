@@ -10,6 +10,10 @@
         width: 50%;
         padding: 20px;
 
+        @media only screen and (max-width: 600px) {
+            width: 95%;
+          }
+
         .header {
             margin-bottom: 20px;
         }
@@ -17,6 +21,34 @@
         .input {
             margin-bottom: 20px;
         }
+
+        .bday {
+            .bday-legend {
+                padding-left: 10px;
+                text-align: left;
+            }
+
+            .birthday-input {
+                width: 100%;
+                margin-bottom: 20px;
+                height: 56px;
+                text-align: left;
+                
+                input {
+                    color: currentColor;
+                    opacity: .7;
+                }
+    
+                .react-date-picker__wrapper {
+                    padding: 10px;
+                    border-radius: 4px;
+                    border: 1px solid rgba(0, 0, 0, 0.27) !important;
+                }
+            }
+        }
+        
+
+        
     }
 
     

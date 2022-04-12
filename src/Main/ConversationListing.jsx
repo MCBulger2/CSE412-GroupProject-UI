@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 
 import "./conversation.css"
+import { baseUrl } from "../constants";
 
 const ConversationListings = (props) => {
   const { conversations } = props;
@@ -19,24 +20,24 @@ const ConversationListings = (props) => {
     <div className="listing-container">
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {conversations.map((conversation) => (
-          <>
-            <ListItem alignItems="flex-start" className="conversation" onClick={() => navigate(`/conversation/${conversation.conversationId}`)}>
+          <React.Fragment key={conversation.conversation_id}>
+            <ListItem alignItems="flex-start" className="conversation" onClick={() => navigate(`/conversation/${conversation.conversation_id}`)}>
               <ListItemAvatar>
                 <Avatar
                   alt={conversation.name}
-                  src="/static/images/avatar/1.jpg"
+                  src={conversation.users.length == 1 ? `${baseUrl}/profile/${conversation.users[0].user_id}/picture` : ""}
                 />
               </ListItemAvatar>
               <ListItemText
                 primary={conversation.name}
                 secondary={
                   <React.Fragment>
-                    {conversation.users.map((user, idx, convs) => (
+                    {conversation?.users?.map((user, idx, convs) => (
                       <Typography
+                        className="users-label"
                         sx={{ display: "inline" }}
                         component="span"
-                        variant="body2"
-                        color="text.primary"
+                        variant="caption"
                       >
                         {user.name}
                         {idx < convs.length - 1 ? ", " : ""}
@@ -47,7 +48,7 @@ const ConversationListings = (props) => {
               />
             </ListItem>
             <Divider variant="inset" component="li" />
-          </>
+          </React.Fragment>
         ))}
       </List>
     </div>

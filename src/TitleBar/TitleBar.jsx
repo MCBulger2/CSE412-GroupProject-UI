@@ -1,35 +1,54 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar } from "@mui/material";
+import { AppBar, Avatar } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import useCurrentUser from "../useCurrentUser";
 
 import "./titlebar.scss";
+import { baseUrl } from "../constants";
 
 const TitleBar = () => {
   let navigate = useNavigate();
+
+  const { getUserId, getUsername, clearUser } = useCurrentUser();
+
+  const user_id = getUserId();
+  const username = getUsername();
+  console.log(username);
+
+  const logout = async () => {
+    fetch(`${baseUrl}/auth/logout`, {
+      credentials: "include",
+      cookie: document.cookie,
+    });
+    clearUser();
+    navigate("/login");
+  };
 
   return (
     <div className="title-bar">
       <AppBar>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Messaging Application
           </Typography>
-          <Button color="inherit" onClick={() => navigate("/login")}>
-            Login
+          {!!user_id && 
+          <Avatar
+            className="profile-picture"
+            alt={username}
+            src={`${baseUrl}/profile/${user_id}/picture`}
+          />}
+          {username && (
+            <Typography component="div">
+              Welcome, <b>{username}</b>!
+            </Typography>
+          )}
+          <Button color="inherit" onClick={logout}>
+            {username ? "Logout" : "Login"}
           </Button>
         </Toolbar>
       </AppBar>
