@@ -46,6 +46,20 @@
                 }
             }
         }
+
+        .picture-container {
+            margin-bottom: 20px;
+
+            .preview-paper {
+                margin: 0 auto 0 auto;
+                padding: 20px;
+                width: 300px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+            }
+        }
         
 
         

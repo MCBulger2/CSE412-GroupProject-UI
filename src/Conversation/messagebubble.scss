@@ -75,6 +75,12 @@
       }
     }
   }
+
+  &.dark {
+    .message-bubble {
+        background-color: #383838;
+      }
+    }
 }
 
 .message-timestamp {

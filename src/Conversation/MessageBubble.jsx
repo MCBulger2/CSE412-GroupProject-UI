@@ -1,4 +1,4 @@
-import { Typography, ListItemAvatar, Avatar } from "@mui/material";
+import { Typography, ListItemAvatar, Avatar, useTheme } from "@mui/material";
 import React from "react";
 import moment from "moment";
 
@@ -11,6 +11,9 @@ const MessageBubble = (props) => {
   const old = moment(prevMessage?.timestamp);
   const timestamp = moment(message.timestamp);
 
+  const theme = useTheme();
+  console.log(theme);
+
   return (
     <>
       {!old ||
@@ -22,7 +25,7 @@ const MessageBubble = (props) => {
       <div
         className={`message-bubble-row-container ${
           isOutgoing ? "outgoing" : ""
-        }`}
+        } ${theme.palette.mode}`}
       >
         {isGroupConversation && (
             <Avatar

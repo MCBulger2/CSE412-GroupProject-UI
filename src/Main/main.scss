@@ -1,3 +1,10 @@
 .main-page {
     padding: 15px;
+
+    .friends-container {
+        .friends-header {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
 }

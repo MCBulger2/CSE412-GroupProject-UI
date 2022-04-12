@@ -1,9 +1,18 @@
-import { LoginRounded, PersonAdd } from "@mui/icons-material";
-import { Paper, TextField, Typography, Button, Alert } from "@mui/material";
-import React, { useState } from "react";
+import { LoginRounded, PersonAdd, Upload } from "@mui/icons-material";
+import {
+  Paper,
+  TextField,
+  Typography,
+  Button,
+  Alert,
+  Avatar,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-date-picker";
 import { useNavigate } from "react-router-dom";
+import { ButtonGroup } from "reactstrap";
 import { baseUrl } from "../constants";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 import "./login.scss";
 
@@ -17,23 +26,27 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imageSrc, setImageSrc] = useState("");
   console.log(selectedFile);
 
-    const getFile = async (file) => {
-        return new Promise((resolve, reject) => {
-            var fileReader = new FileReader();
-            fileReader.onload = () => resolve(fileReader.result.replace("data:image/png;base64,", ""));
-            fileReader.readAsDataURL(file);
-        });
-        
-    };
+  const getFile = async (file) => {
+    return new Promise((resolve, reject) => {
+      var fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve([
+          fileReader.result.replace("data:image/png;base64,", ""),
+          fileReader.result,
+        ])
+      };
+      fileReader.readAsDataURL(file);
+    });
+  };
 
   const register = async () => {
     let file;
-    if (selectedFile)
-    {
-        file = await getFile(selectedFile);
-        console.log(file);
+    if (selectedFile) {
+      const [file, og] = await getFile(selectedFile);
+      console.log(file);
     }
 
     if (name.length < 1) {
@@ -56,16 +69,20 @@ const Register = (props) => {
       return;
     }
 
+    const obj = {
+      username,
+      name,
+      birthday: `${birthday.getFullYear()}-${birthday.getMonth()}-${birthday.getDate()}`,
+      pw_hash: password,
+      profile_picture: selectedFile ? imageSrc.replace("data:image/png;base64,", "") : undefined
+    };
+    console.log(file);
+    const body = JSON.stringify(obj);
+    console.log(body);
     const result = await fetch(`${baseUrl}/profile`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify({
-        username,
-        name,
-        birthday: `${birthday.getFullYear()}-${birthday.getMonth()}-${birthday.getDate()}`,
-        pw_hash: password,
-        profile_picture: file
-      }),
+      body,
       headers: {
         "Content-Type": "application/json",
       },
@@ -83,6 +100,21 @@ const Register = (props) => {
   const handleBirthdayChange = (newDate) => {
     setBirthday(newDate);
   };
+
+  const uploadFile = (e) => {
+    const file = e.target.files[0];
+    if (file.size > 1048576*2) {
+      setError("Profile pictures must be under 2MB.");
+      return;
+    }
+    setSelectedFile(file);
+  };
+
+  useEffect(() => {
+    if (selectedFile) {
+      getFile(selectedFile).then(([file, og]) => setImageSrc(og));
+    }
+  }, [selectedFile])
 
   return (
     <div className="login-page">
@@ -139,15 +171,34 @@ const Register = (props) => {
               required
             />
           </div>
-          <Button variant="contained" component="label">
-            Upload Profile Picture
-            <input
-              type="file"
-              hidden
-              onChange={(e) => setSelectedFile(e.target.files[0])}
-            />
-          </Button>
-          {selectedFile?.name}
+          <div className="picture-container">
+            <Typography style={{textAlign: "left", marginBottom: "5px"}}>You can optionally upload a profile picture for your account:</Typography>
+            <Button
+              variant="contained"
+              component="label"
+              className="mb-2"
+              startIcon={<Upload />}
+            >
+              Upload Profile Picture
+              <input type="file" hidden onChange={uploadFile} />
+            </Button>
+            <Paper variant="outlined" square className="preview-paper">
+              <>
+                <Avatar
+                  src={imageSrc || name}
+                  alt={name.toUpperCase()}
+                  sx={{ width: 75, height: 75 }}
+                />
+                <Typography
+                  variant="caption"
+                  component="div"
+                  className="d-block"
+                >
+                  {imageSrc ? selectedFile?.name : "No file selected"}
+                </Typography>
+              </>
+            </Paper>
+          </div>
           <Button
             variant="contained"
             startIcon={<PersonAdd />}

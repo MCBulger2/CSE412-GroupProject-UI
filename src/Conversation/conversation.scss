@@ -13,11 +13,18 @@
 }
 
 .top-bar {
-    background-color: white;
     width: 100%;
     box-shadow: 0px 1px 12px 3px rgba(0,0,0,0.34);
     padding: 10px;
     text-align: center;
+
+    &.dark {
+        background-color: rgb(27, 27, 27);
+    }
+
+    &.light {
+        background-color: rgb(255, 255, 255);
+    }
 }
 
 .bottom-bar {
@@ -31,7 +38,6 @@
         align-items: stretch;
         background-color: #fdfdfdf6;
         //box-shadow: 0px 5px 10px 5px rgba(0,0,0,0.1);
-
         input {
             width: 100%;
             
@@ -41,5 +47,17 @@
 
     .send-button-container {
         margin-left: 20px;
+    }
+
+    &.dark {
+        .mesage-input {
+            
+            background-color: transparent;
+            input {
+                background-color: black;
+                
+            }
+            
+        }
     }
 }

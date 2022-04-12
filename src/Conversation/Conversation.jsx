@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
 import "./conversation.scss";
-import { AppBar, Fab, TextField, Typography } from "@mui/material";
+import { AppBar, Fab, TextField, Typography, useTheme } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
@@ -11,6 +11,8 @@ import { baseUrl } from "../constants";
 
 const Conversation = () => {
   let { conversationId } = useParams();
+
+  const theme = useTheme();
 
   const [newMessage, setNewMessage] = useState("");
   const [refresh, setRefresh] = useState(false);
@@ -57,7 +59,7 @@ const Conversation = () => {
   return (
     <>
       <div
-        className="top-bar"
+        className={`top-bar ${theme.palette.mode}"`}
         style={{
           position: "fixed",
           top: 64,
@@ -95,7 +97,7 @@ const Conversation = () => {
         </div>
       </div>
       <div
-        className="bottom-bar"
+        className={`bottom-bar ${theme.palette.mode}`}
         style={{ position: "fixed", top: "auto", bottom: 0, marginTop: "20px" }}
       >
         <TextField

@@ -1,17 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Avatar } from "@mui/material";
+import { AppBar, Avatar, useTheme } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import useCurrentUser from "../useCurrentUser";
+import Switch from "./Switch";
 
 import "./titlebar.scss";
 import { baseUrl } from "../constants";
 
-const TitleBar = () => {
+const TitleBar = (props) => {
+  const {
+    mode,
+    setMode
+  } = props;
+
   let navigate = useNavigate();
 
   const { getUserId, getUsername, clearUser } = useCurrentUser();
@@ -36,6 +42,7 @@ const TitleBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Messaging Application
           </Typography>
+          <Switch checked={mode === "dark"} onChange={() => setMode(mode === "dark" ? "light" : "dark")}/>
           {!!user_id && 
           <Avatar
             className="profile-picture"

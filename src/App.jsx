@@ -9,41 +9,18 @@ import Register from "./Login/Register";
 import { useMemo, useState } from "react";
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { amber, deepOrange, grey } from '@mui/material/colors';
-import { PaletteMode } from '@mui/material';
+import { CssBaseline, PaletteMode } from '@mui/material';
 
 const getDesignTokens = (mode) => ({
   palette: {
-    mode,
-    ...(mode === "light"
-      ? {
-          // palette values for light mode
-          primary: amber,
-          divider: amber[200],
-          text: {
-            primary: grey[900],
-            secondary: grey[800],
-          },
-        }
-      : {
-          // palette values for dark mode
-          primary: deepOrange,
-          divider: deepOrange[700],
-          background: {
-            default: deepOrange[900],
-            paper: deepOrange[900],
-          },
-          text: {
-            primary: "#fff",
-            secondary: grey[500],
-          },
-        }),
+    mode
   },
 });
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const App = () => {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState("dark");
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method
@@ -60,9 +37,10 @@ const App = () => {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <BrowserRouter>
           <div className="screen">
-            <TitleBar />
+            <TitleBar mode={mode} setMode={setMode} />
             <div className="page">
               <Routes>
                 <Route path="/" element={<Main />} />
