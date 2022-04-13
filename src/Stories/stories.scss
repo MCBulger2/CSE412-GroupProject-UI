@@ -3,10 +3,14 @@
   flex-direction: row;
   margin-top: 10px;
   overflow-x: auto;
-  height: 150px;
+  margin-bottom: 10px;
+
+  width: calc(100% + 20px);
+  margin-left: -15px;
+  padding-left: 15px;
 
   .story-icon {
-    margin: 5px;
+    margin: 7px;
     position: relative;
     border: 5px solid transparent;
     border-radius: 90px;
@@ -16,33 +20,94 @@
     cursor: pointer;
     width: 80px;
     height: 80px;
-    box-shadow: 3px 3px 5px -1px rgba(0,0,0,0.1);
-    .profile-picture {
-        box-shadow: 3px 3px 5px -1px inset rgba(0,0,0,0.3);
-        position: relative;
-        top: -10px;
-        left: -10px;
-        width: 70px;
-        height: 70px;
-        z-index: 101;
-    }
 
-    .name-label {
-        font-weight: 500;
-        display: block;
-        line-height: 1.1;
-        text-align: center;
+    box-shadow: 0px 2px 12px 1px rgba(255, 234, 130, 0.329);
+    .profile-picture {
+      box-shadow: 3px 3px 5px -1px inset rgba(0, 0, 0, 0.1);
+      position: relative;
+      top: -10px;
+      left: -10px;
+      width: 70px;
+      height: 70px;
+      z-index: 101;
     }
   }
 
   .story-icon::after {
     position: absolute;
-    top: -5px; bottom: -5px;
-    left: -5px; right: -5px;
-    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
-    content: '';
+    top: -5px;
+    bottom: -5px;
+    left: -5px;
+    right: -5px;
+    background: linear-gradient(
+      45deg,
+      #f09433 0%,
+      #e6683c 25%,
+      #dc2743 50%,
+      #cc2366 75%,
+      #bc1888 100%
+    );
+    content: "";
     z-index: -1;
     border-radius: 90px;
     z-index: 100;
   }
+
+  .name-label {
+    font-weight: 500;
+    display: block;
+    line-height: 1.1;
+    text-align: center;
+    margin: 5px;
+  }
+}
+
+.anchorEl {
+  
+  .story-icon {
+    box-shadow: 0px 1px 12px 1px rgb(255, 234, 130);
+  }
+}
+
+
+
+.story-popover-paper{
+  border-radius: 20px !important;
+  padding: 20px;
+  margin-top: -5px;
+  width: min(85%, 700px);
+  overflow: visible !important;
+  margin-left: 5px;
+  height: min(60%, 800px);
+  overflow: hidden;
+
+  .profile-picture-abs {
+    position: relative;
+    top: -15px;
+    left: -15px;
+    margin-left: -15px;
+    margin-top: -15px;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .story-popover-name {
+    font-weight: bold;
+    margin-top: -5px;
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .story-list {
+    margin-top: -10px;
+    height: calc(100% - 30px);
+    overflow-y: auto;
+  }
+}
+
+.MuiBackdrop-invisible {
+  background-color: #00000055 !important;
+  //z-index: 0 !important;
 }

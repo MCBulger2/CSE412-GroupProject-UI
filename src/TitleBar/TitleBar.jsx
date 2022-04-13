@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Avatar, useTheme } from "@mui/material";
+import { AppBar, Avatar, Tooltip, useTheme } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -20,16 +20,15 @@ const TitleBar = (props) => {
 
   let navigate = useNavigate();
 
-  const { getUserId, getUsername, clearUser } = useCurrentUser();
+  const { getUserId, getUsername, clearUser, getCookie } = useCurrentUser();
 
   const user_id = getUserId();
   const username = getUsername();
-  console.log(username);
 
   const logout = async () => {
     fetch(`${baseUrl}/auth/logout`, {
       credentials: "include",
-      cookie: document.cookie,
+      cookie: getCookie(),
     });
     clearUser();
     navigate("/login");
@@ -39,10 +38,15 @@ const TitleBar = (props) => {
     <div className="title-bar">
       <AppBar>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography className="app-title" variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Messaging Application
           </Typography>
-          <Switch checked={mode === "dark"} onChange={() => setMode(mode === "dark" ? "light" : "dark")}/>
+          <div className="right-toolbar-items">
+          <Tooltip title={mode === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled"}>
+            <span>
+              <Switch checked={mode === "dark"} onChange={() => setMode(mode === "dark" ? "light" : "dark")}/>
+            </span>
+          </Tooltip>
           {!!user_id && 
           <Avatar
             className="profile-picture"
@@ -57,6 +61,7 @@ const TitleBar = (props) => {
           <Button color="inherit" onClick={logout}>
             {username ? "Logout" : "Login"}
           </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

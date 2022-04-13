@@ -1,6 +1,7 @@
-import { Button, Typography } from "@mui/material";
+import { PlusOne } from "@mui/icons-material";
+import { BottomNavigation, BottomNavigationAction, Button, setRef, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link,useLocation, matchPath } from "react-router-dom";
 import { baseUrl } from "../constants";
 import Stories from "../Stories/Stories";
 import useApiRequest from "../useApiRequest";
@@ -11,8 +12,11 @@ import "./main.scss";
 import NewConversation from "./NewConversation";
 import NewFriend from "./NewFriend";
 
+
+
 const Main = () => {
-  const conversations = useApiRequest("/conversation/all", []);
+  const [refresh, setRefresh] = useState(false);
+  const conversations = useApiRequest("/conversation/all", [], [refresh]);
   const navigate = useNavigate();
   const { getUserId } = useCurrentUser();
   const user_id = getUserId();
@@ -26,9 +30,12 @@ const Main = () => {
   const [newConverationOpen, setNewConversationOpen] = useState(false);
   const [addFriendOpen, setAddFriendOpen] = useState(false);
 
+  
+
   return (
     <>
       <div className="main-page">
+        
         <div className="friends-container">
           <div className="friends-header">
             <Typography variant="h5">Friends</Typography>

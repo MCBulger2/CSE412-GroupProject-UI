@@ -24,15 +24,13 @@ const Login = (props) => {
     }
 
     const user = await result.json();
-    localStorage.setItem("user_id", user.user_id);
+    sessionStorage.setItem("user_id", user.user_id);
 
     const result2 = await fetch(`${baseUrl}/profile/${user.user_id}`, {
       credentials: "include",
     });
     const user_full = await result2.json();
-    localStorage.setItem("username", user_full.username);
-
-    console.log(user);
+    sessionStorage.setItem("username", user_full.username);
 
     navigate("/");
   };

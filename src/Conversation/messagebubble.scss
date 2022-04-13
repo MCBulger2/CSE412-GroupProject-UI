@@ -2,20 +2,32 @@
   padding: 0px 30px 15px;
 
   @media only screen and (max-width: 600px) {
-    padding: 0px ;
+    padding: 0px 20px 10px;
   }
 
   display: flex;
-
-  &.outgoing {
-    flex-direction: row-reverse;
-  }
 
   .message-bubble-picture {
     align-self: end;
     margin: 10px;
     margin-bottom: 5px;
     box-shadow: 3px 3px 10px -5px rgba(0, 0, 0, 0.15);
+
+    @media only screen and (max-width: 600px) {
+      margin-left: -10px;
+      width: 25px;
+      height: 25px;
+      font-size: small;
+    }
+  }
+
+  &.outgoing {
+    .message-bubble-picture {
+      @media only screen and (max-width: 600px) {
+        display: none;
+      }
+    }
+    flex-direction: row-reverse;
   }
 
   .message-bubble-row {
@@ -33,8 +45,12 @@
       max-width: 75%;
       hyphens: auto;
       box-shadow: 3px 3px 10px -5px rgba(0, 0, 0, 0.15);
-      word-wrap: break-word;
+      word-break: break-word;
       background-repeat: repeat;
+
+      @media only screen and (max-width: 600px) {
+        max-width: 80%;
+      }
     }
 
     .message-name {
@@ -78,9 +94,9 @@
 
   &.dark {
     .message-bubble {
-        background-color: #383838;
-      }
+      background-color: #383838;
     }
+  }
 }
 
 .message-timestamp {

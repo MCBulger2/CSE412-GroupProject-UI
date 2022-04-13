@@ -1,5 +1,6 @@
 .main-page {
     padding: 15px;
+    overflow-y: scroll;
 
     .friends-container {
         .friends-header {
@@ -7,4 +8,6 @@
             justify-content: space-between;
         }
     }
+
+    
 }

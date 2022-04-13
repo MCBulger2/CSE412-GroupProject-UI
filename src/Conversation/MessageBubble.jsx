@@ -12,7 +12,6 @@ const MessageBubble = (props) => {
   const timestamp = moment(message.timestamp);
 
   const theme = useTheme();
-  console.log(theme);
 
   return (
     <>

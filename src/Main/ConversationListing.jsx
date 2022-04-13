@@ -8,7 +8,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 
-import "./conversation.css"
+import "./conversation.scss"
 import { baseUrl } from "../constants";
 
 const ConversationListings = (props) => {
@@ -38,6 +38,7 @@ const ConversationListings = (props) => {
                         sx={{ display: "inline" }}
                         component="span"
                         variant="caption"
+                        key={user.user_id}
                       >
                         {user.name}
                         {idx < convs.length - 1 ? ", " : ""}

@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../constants";
 import useApiRequest from "../useApiRequest";
+import useCurrentUser from "../useCurrentUser";
 
 const NewConversation = (props) => {
   const { open, onClose } = props;
@@ -24,6 +25,8 @@ const NewConversation = (props) => {
   const friends = useApiRequest("/friend/friendee", []);
 
   const navigate = useNavigate();
+
+  const {getCookie} = useCurrentUser();
 
   const [usernames, setUsernames] = useState([]);
   const [conversationName, setConversationName] = useState("");
@@ -40,14 +43,12 @@ const NewConversation = (props) => {
         method: "POST",
         body: JSON.stringify({ name: conversationName, users: usernames }),
         credentials: "include",
-        cookie: document.cookie,
+        cookie: getCookie(),
         headers: {
             "Content-Type": "application/json"
         }
     });
-    console.log(result);
     const conversation = await result.json();
-    console.log(conversation);
 
     navigate(`/conversation/${conversation.conversation_id}`)
   };

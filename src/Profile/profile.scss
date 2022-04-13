@@ -1,0 +1,30 @@
+.profile-paper {
+  padding: 20px;
+  display: flex;
+  margin: 20px 200px;
+
+  .showcase {
+    display: flex;
+    align-items: center;
+
+    @media only screen and (max-width: 600px) {
+      // /flex-grow: 1;
+    }
+
+    .stories {
+      width: initial;
+      
+    }
+  }
+
+  @media only screen and (max-width: 1000px) {
+    margin: 20px 20px;
+  }
+}
+
+.story-popover-paper{
+    .story-list.can-post {
+        margin-top: 0;
+        height: calc(100% - 100px);
+      }
+}

@@ -2,12 +2,13 @@ import { useMemo } from "react";
 
 const useCurrentUser = () => {
     return {
-        getUserId: () => parseInt(localStorage.getItem("user_id")),
-        getUsername: () => localStorage.getItem("username"),
+        getUserId: () => parseInt(sessionStorage.getItem("user_id")),
+        getUsername: () => sessionStorage.getItem("username"),
         clearUser: () => {
-            localStorage.clear();
+            sessionStorage.clear();
             document.cookie = "";
-        }
+        },
+        getCookie: () => document.cookie
     };
 }
 

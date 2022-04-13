@@ -1,18 +1,20 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
 import "./conversation.scss";
-import { AppBar, Fab, TextField, Typography, useTheme } from "@mui/material";
-import { Send } from "@mui/icons-material";
+import { AppBar, Fab, IconButton, TextField, Typography, useTheme, Slide, Collapse } from "@mui/material";
+import { ChevronLeft, Send } from "@mui/icons-material";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
 import { baseUrl } from "../constants";
+import useInterval from "../useInterval";
 
 const Conversation = () => {
   let { conversationId } = useParams();
 
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [newMessage, setNewMessage] = useState("");
   const [refresh, setRefresh] = useState(false);
@@ -21,7 +23,7 @@ const Conversation = () => {
     refresh,
   ]);
 
-  const { getUserId } = useCurrentUser();
+  const { getUserId, getCookie } = useCurrentUser();
   const user_id = getUserId();
 
   const handleSend = async () => {
@@ -29,6 +31,8 @@ const Conversation = () => {
       conversation_id: conversation.conversation_id,
       content: newMessage,
     });
+    document.cookie = getCookie();
+    console.log(document.cookie);
     const response = await fetch(`${baseUrl}/conversation/send`, {
       method: "POST",
       headers: {
@@ -36,7 +40,7 @@ const Conversation = () => {
       },
       body,
       credentials: "include",
-      cookie: document.cookie,
+      cookie: getCookie(),
     });
 
     if (!response.ok) {
@@ -44,22 +48,31 @@ const Conversation = () => {
     }
 
     const obj = await response.json();
-    console.log(obj);
 
     setNewMessage("");
-    setRefresh(true);
+    setRefresh("manual");
   };
 
   useEffect(() => {
-    setRefresh(false);
-    var div = document.querySelector(".conversation-list");
-    div.scrollTop = div.scrollHeight;
+    if (refresh === "manual")
+    {
+      var div = document.querySelector(".conversation-list");
+      div.scrollTop = div.scrollHeight;
+      setRefresh(false);
+    }
   }, [conversation]);
+
+  useInterval(() => setRefresh(true), 20000);
+  useEffect(() => {
+    if (refresh === true) {
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   return (
     <>
       <div
-        className={`top-bar ${theme.palette.mode}"`}
+        className={`top-bar ${theme.palette.mode}`}
         style={{
           position: "fixed",
           top: 64,
@@ -67,6 +80,7 @@ const Conversation = () => {
           marginBottom: "20px",
         }}
       >
+        <IconButton className="back-button" size="large" onClick={() => navigate("/")}><ChevronLeft fontSize="large" /></IconButton>
         <Typography variant="h6">{conversation.name}</Typography>
         <React.Fragment>
           {conversation?.users?.map((user, idx, convs) => (
@@ -75,6 +89,7 @@ const Conversation = () => {
               sx={{ display: "inline" }}
               component="span"
               variant="caption"
+              key={user.user_id}
             >
               {user.name}
               {idx < convs.length - 1 ? ", " : ""}
@@ -100,6 +115,7 @@ const Conversation = () => {
         className={`bottom-bar ${theme.palette.mode}`}
         style={{ position: "fixed", top: "auto", bottom: 0, marginTop: "20px" }}
       >
+        <Slide direction="up" appear in mountOnEnter unmountOnExit timeout={{enter: 200}}>
         <TextField
           className="mesage-input"
           label="Message"
@@ -108,11 +124,14 @@ const Conversation = () => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
+        </Slide>
+        <Slide direction="up" appear in mountOnEnter unmountOnExit timeout={{enter: 500}} >
         <div className="send-button-container">
-          <Fab color="primary" aria-label="add" onClick={handleSend}>
+          <Fab color="primary" aria-label="add" onClick={handleSend} disabled={newMessage.length === 0}>
             <Send />
           </Fab>
         </div>
+        </Slide>
       </div>
     </>
   );

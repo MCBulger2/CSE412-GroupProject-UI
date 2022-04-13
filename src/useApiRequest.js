@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import { baseUrl } from "./constants";
+import useCurrentUser from "./useCurrentUser";
 
 const useApiRequest = (apiPath, defaultValue, deps = []) => {
     const [obj, setObj] = useState(defaultValue);
 
+    const {getCookie} = useCurrentUser();
+
     const makeRequest = async (path) => {
         const response = await fetch(`${baseUrl}${path}`, {
             credentials: "include",
-            cookie: document.cookie,
+            cookie: getCookie(),
         });
         const obj = await response.json()
-        console.log(obj);
         setObj(obj);
+        console.log(obj);
     };
 
     useEffect(() => {

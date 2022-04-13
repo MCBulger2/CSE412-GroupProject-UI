@@ -27,7 +27,6 @@ const Register = (props) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageSrc, setImageSrc] = useState("");
-  console.log(selectedFile);
 
   const getFile = async (file) => {
     return new Promise((resolve, reject) => {
@@ -46,7 +45,6 @@ const Register = (props) => {
     let file;
     if (selectedFile) {
       const [file, og] = await getFile(selectedFile);
-      console.log(file);
     }
 
     if (name.length < 1) {
@@ -76,9 +74,7 @@ const Register = (props) => {
       pw_hash: password,
       profile_picture: selectedFile ? imageSrc.replace("data:image/png;base64,", "") : undefined
     };
-    console.log(file);
     const body = JSON.stringify(obj);
-    console.log(body);
     const result = await fetch(`${baseUrl}/profile`, {
       method: "POST",
       credentials: "include",
