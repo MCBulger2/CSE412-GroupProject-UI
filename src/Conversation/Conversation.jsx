@@ -26,7 +26,9 @@ const Conversation = () => {
   const { getUserId, getCookie } = useCurrentUser();
   const user_id = getUserId();
 
-  const handleSend = async () => {
+  const handleSend = async (e) => {
+    e.preventDefault();
+
     const body = JSON.stringify({
       conversation_id: conversation.conversation_id,
       content: newMessage,
@@ -69,6 +71,19 @@ const Conversation = () => {
     }
   }, [refresh]);
 
+  const readReceipts = useMemo(() => (
+    conversation?.users?.reduce((prev, user) => {
+      if (!user.read_receipt) return prev;
+
+      const newVal = {...prev};
+      if (prev[user.read_receipt]) {
+        return { ...newVal, [user.read_receipt]: prev[user.read_receipt].concat(user) }
+      }
+      newVal[user.read_receipt] = [user];
+      return newVal;
+    }, {})
+  ), [conversation, conversation?.users]);
+  console.log(readReceipts);
   return (
     <>
       <div
@@ -106,11 +121,14 @@ const Conversation = () => {
                 prevMessage={messages[idx - 1]}
                 isOutgoing={message.sender_id === user_id}
                 isGroupConversation={conversation.users.length > 2}
+                readReceipts={readReceipts?.[message.message_id]}
+                user_id={user_id}
               />
             </React.Fragment>
           ))}
         </div>
       </div>
+      <form onSubmit={handleSend}>
       <div
         className={`bottom-bar ${theme.palette.mode}`}
         style={{ position: "fixed", top: "auto", bottom: 0, marginTop: "20px" }}
@@ -123,16 +141,18 @@ const Conversation = () => {
           fullWidth
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          autoFocus
         />
         </Slide>
         <Slide direction="up" appear in mountOnEnter unmountOnExit timeout={{enter: 500}} >
         <div className="send-button-container">
-          <Fab color="primary" aria-label="add" onClick={handleSend} disabled={newMessage.length === 0}>
+          <Fab color="primary" aria-label="add" onClick={handleSend} disabled={newMessage.length === 0} type="submit">
             <Send />
           </Fab>
         </div>
         </Slide>
       </div>
+      </form>
     </>
   );
 };

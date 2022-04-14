@@ -1,11 +1,13 @@
 import { PlusOne } from "@mui/icons-material";
-import { BottomNavigation, BottomNavigationAction, Button, setRef, Tab, Tabs, Typography } from "@mui/material";
+import { Button, setRef, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link,useLocation, matchPath } from "react-router-dom";
 import { baseUrl } from "../constants";
 import Stories from "../Stories/Stories";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
+import useInterval from "../useInterval";
+import BottomNavigation from "./BottomNavigation";
 import ConversationListings from "./ConversationListing";
 
 import "./main.scss";
@@ -30,7 +32,12 @@ const Main = () => {
   const [newConverationOpen, setNewConversationOpen] = useState(false);
   const [addFriendOpen, setAddFriendOpen] = useState(false);
 
-  
+  useInterval(() => setRefresh(true), 20000);
+  useEffect(() => {
+    if (refresh === true) {
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   return (
     <>
@@ -63,6 +70,7 @@ const Main = () => {
         onClose={() => setNewConversationOpen(false)}
       />
       <NewFriend open={addFriendOpen} onClose={() => setAddFriendOpen(false)} />
+      <BottomNavigation />
     </>
   );
 };

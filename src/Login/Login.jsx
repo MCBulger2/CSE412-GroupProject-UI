@@ -12,7 +12,9 @@ const Login = (props) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
+
     const result = await fetch(
       `${baseUrl}/auth?username=${username}&pw_hash=${password}`,
       { credentials: "include" }
@@ -38,8 +40,8 @@ const Login = (props) => {
   return (
     <div className="login-page">
       <Paper className="login-paper" elevation={3}>
-        <form>
-          <Typography className="header" variant="h5">
+        <form onSubmit={login}>
+          <Typography className="header" variant="h4">
             Login
           </Typography>
           {error && (
@@ -68,6 +70,7 @@ const Login = (props) => {
             variant="contained"
             startIcon={<LoginRounded />}
             onClick={login}
+            type="submit"
           >
             Login
           </Button>

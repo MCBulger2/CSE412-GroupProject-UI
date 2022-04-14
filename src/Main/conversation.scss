@@ -4,6 +4,24 @@
 
 .listing-container {
     width: 100%;
+    padding-left: 3px;
+
+    .unread {
+        position: relative;
+        width: 10px;
+        margin-right: -10px;
+        left: -20px;
+        height: 10px;
+        align-self: center;
+        background-color: #045de9;
+        background-image: linear-gradient(315deg, #045de9 0%, #09adf9 74%);
+        box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 90px;
+    }
+
+    .extra-divider {
+        //margin-left: 102px;
+    }
 }
 
 .users-label {

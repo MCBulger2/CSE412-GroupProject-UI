@@ -19,6 +19,14 @@
             .app-title {
                     display: none;
             }
+
+            .right-toolbar-items {
+                justify-content: space-between;
+                width: 100%;
+                .welcome  {
+                    order :-1;
+                }
+            }
         }
         
     }

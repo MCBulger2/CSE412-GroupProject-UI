@@ -22,6 +22,7 @@ const ConversationListings = (props) => {
         {conversations.map((conversation) => (
           <React.Fragment key={conversation.conversation_id}>
             <ListItem alignItems="flex-start" className="conversation" onClick={() => navigate(`/conversation/${conversation.conversation_id}`)}>
+              {conversation.unread && <div className={"unread"} />}
               <ListItemAvatar>
                 <Avatar
                   alt={conversation.name}
@@ -48,7 +49,7 @@ const ConversationListings = (props) => {
                 }
               />
             </ListItem>
-            <Divider variant="inset" component="li" />
+            <Divider variant="inset" component="li" className={conversation.unread ? "extra-divider" : ""} />
           </React.Fragment>
         ))}
       </List>

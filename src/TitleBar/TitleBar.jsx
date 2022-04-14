@@ -43,10 +43,11 @@ const TitleBar = (props) => {
           </Typography>
           <div className="right-toolbar-items">
           <Tooltip title={mode === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled"}>
-            <span>
+            <span className="ml-auto">
               <Switch checked={mode === "dark"} onChange={() => setMode(mode === "dark" ? "light" : "dark")}/>
             </span>
           </Tooltip>
+          <span className="welcome d-flex align-items-center">
           {!!user_id && 
           <Avatar
             className="profile-picture"
@@ -58,6 +59,7 @@ const TitleBar = (props) => {
               Welcome, <b>{username}</b>!
             </Typography>
           )}
+          </span>
           <Button color="inherit" onClick={logout}>
             {username ? "Logout" : "Login"}
           </Button>

@@ -6,7 +6,10 @@
     align-items: center;
     text-align: center;
 
+    overflow: auto;
+
     .login-paper {
+        margin: 50px;
         width: 50%;
         padding: 20px;
 

@@ -38,7 +38,8 @@ const NewConversation = (props) => {
     setUsernames(typeof value === "string" ? value.split(",") : value);
   };
 
-  const createConversation = async () => {
+  const createConversation = async (e) => {
+    e.preventDefault();
     const result = await fetch(`${baseUrl}/conversation`, {
         method: "POST",
         body: JSON.stringify({ name: conversationName, users: usernames }),
@@ -54,6 +55,7 @@ const NewConversation = (props) => {
   };
 
   return (
+    <form onSubmit={createConversation}>
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>New Conversation</DialogTitle>
       <DialogContent>
@@ -93,11 +95,12 @@ const NewConversation = (props) => {
       </DialogContent>
       <DialogActions>
         <Button startIcon={<Close />} onClick={() => onClose()}>Cancel</Button>
-        <Button variant="contained" startIcon={<Send />} onClick={createConversation}>
+        <Button variant="contained" startIcon={<Send />} onClick={createConversation} type="submit">
           Create
         </Button>
       </DialogActions>
     </Dialog>
+    </form>
   );
 };
 

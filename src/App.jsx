@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./Main/Main";
@@ -52,7 +52,7 @@ const getDesignTokens = (mode) => ({
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const App = () => {
-  const [mode, setMode] = useState("dark");
+  const [mode, setMode] = useState(localStorage.getItem("theme_mode") ?? "dark");
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method
@@ -62,6 +62,10 @@ const App = () => {
     }),
     []
   );
+
+  useEffect(() => {
+    localStorage.setItem("theme_mode", mode);
+  }, [mode]);
 
   // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
@@ -85,7 +89,6 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
               </Routes>
             </div>
-            <BottomNavigation />
           </div>
         </BrowserRouter>
       </ThemeProvider>

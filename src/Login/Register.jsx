@@ -41,7 +41,9 @@ const Register = (props) => {
     });
   };
 
-  const register = async () => {
+  const register = async (e) => {
+    e.preventDefault();
+
     let file;
     if (selectedFile) {
       const [file, og] = await getFile(selectedFile);
@@ -84,8 +86,9 @@ const Register = (props) => {
       },
     });
 
-    setError(!result.ok);
+    
     if (!result.ok) {
+      setError("There was an issue creating yourr account. Please choose a unique username.");
       return;
     }
 
@@ -115,7 +118,7 @@ const Register = (props) => {
   return (
     <div className="login-page">
       <Paper className="login-paper" elevation={3}>
-        <form>
+        <form onSubmit={register}>
           <Typography className="header" variant="h5">
             Register
           </Typography>
@@ -176,7 +179,7 @@ const Register = (props) => {
               startIcon={<Upload />}
             >
               Upload Profile Picture
-              <input type="file" hidden onChange={uploadFile} />
+              <input type="file" hidden onChange={uploadFile} accept=".png"/>
             </Button>
             <Paper variant="outlined" square className="preview-paper">
               <>
@@ -199,6 +202,7 @@ const Register = (props) => {
             variant="contained"
             startIcon={<PersonAdd />}
             onClick={register}
+            type="submit"
           >
             Register
           </Button>
