@@ -41,7 +41,7 @@ const Login = (props) => {
     <div className="login-page">
       <Paper className="login-paper" elevation={3}>
         <form onSubmit={login}>
-          <Typography className="header" variant="h4">
+          <Typography className="header" variant="h3">
             Login
           </Typography>
           {error && (

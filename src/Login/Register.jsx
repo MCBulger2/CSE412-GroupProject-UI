@@ -119,7 +119,7 @@ const Register = (props) => {
     <div className="login-page">
       <Paper className="login-paper" elevation={3}>
         <form onSubmit={register}>
-          <Typography className="header" variant="h5">
+          <Typography className="header" variant="h3">
             Register
           </Typography>
           {error && (
