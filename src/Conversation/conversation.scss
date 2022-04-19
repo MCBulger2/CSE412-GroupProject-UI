@@ -9,21 +9,36 @@
     //align-items: stretch;
     flex-basis: content;
     padding-bottom: 75px;
-    padding-top: 20px;
-    margin-top: 75px;
+    padding-top: 75px; //20px;
+    margin-top: 0px; //75px;
     hyphens: auto;
 }
 
 .top-bar {
+    z-index: 500;
     width: 100%;
     box-shadow: 0px 1px 12px 3px rgba(0,0,0,0.34);
     padding: 10px;
     text-align: center;
 
+    -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  //filter: blur(10px);
+  
+    background-color: #ffffff7f;
+    border: 1px solid #ffffff55;
+
     .back-button {
         position: absolute;
         left: 10px;
         top: 7px;
+    }
+
+    .loading-bar {
+        position: relative;
+        bottom: -12px;
+        left: -20px;
+        width: calc(100% + 31px);
     }
 
     &.dark {
@@ -51,7 +66,7 @@
     .mesage-input {
         flex: 1 1 auto;
         align-items: stretch;
-        background-color: #fdfdfdf6;
+        background-color: #fdfdfdf5;
         //box-shadow: 0px 5px 10px 5px rgba(0,0,0,0.1);
         input {
             width: 100%;
@@ -65,6 +80,11 @@
         @media only screen and (max-width: 600px) {
             margin-left: 10px;
           }
+
+        button:disabled {
+            background-color: rgba(131, 131, 131, 0.89);
+            box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2);
+        }
     }
 
     &.dark {
@@ -72,7 +92,7 @@
             
             background-color: transparent;
             input {
-                background-color: #000000de;
+                background-color: #000000ee;
                 
             }
             
@@ -84,3 +104,34 @@
     //margin-bottom: 0 !important;
     //overflow: visible !important;
 }
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    .top-bar {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .mesage-input {
+        -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+  }
+  
+  /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
+  @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .top-bar {
+        &.dark {
+            border: none;
+            background-color: #1e3250f5;
+            span {
+                color:#d3d3d3
+            }
+        }
+    
+        &.light {
+            //background-color: rgb(255, 255, 255);
+            background-color: rgba(255, 255, 255, 0.98);
+        }
+      
+    }
+  }

@@ -3,12 +3,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
 import "./conversation.scss";
-import { AppBar, Fab, IconButton, TextField, Typography, useTheme, Slide, Collapse } from "@mui/material";
+import { styled, AppBar, Fab, IconButton, TextField, Typography, useTheme, Slide, Collapse, LinearProgress } from "@mui/material";
 import { ChevronLeft, Send } from "@mui/icons-material";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
 import { baseUrl } from "../constants";
 import useInterval from "../useInterval";
+import Loading from "../Utils/Loading";
+
+const FastLinearProgress = styled(LinearProgress)({
+  "& .MuiLinearProgress-bar": {
+    animationDuration: "0.1s"
+  }
+});
 
 const Conversation = () => {
   let { conversationId } = useParams();
@@ -19,6 +26,9 @@ const Conversation = () => {
   const [newMessage, setNewMessage] = useState("");
   const [refresh, setRefresh] = useState(false);
 
+  const [progress, setProgress] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const conversation = useApiRequest(`/conversation/${conversationId}`, {}, [
     refresh,
   ]);
@@ -28,6 +38,8 @@ const Conversation = () => {
 
   const handleSend = async (e) => {
     e.preventDefault();
+    setProgress(20);
+    setNewMessage("");
 
     const body = JSON.stringify({
       conversation_id: conversation.conversation_id,
@@ -35,6 +47,7 @@ const Conversation = () => {
     });
     document.cookie = getCookie();
     console.log(document.cookie);
+    setProgress(30);
     const response = await fetch(`${baseUrl}/conversation/send`, {
       method: "POST",
       headers: {
@@ -44,12 +57,15 @@ const Conversation = () => {
       credentials: "include",
       cookie: getCookie(),
     });
+    setProgress(40);
 
     if (!response.ok) {
+      setProgress(false);
       return;
     }
 
     const obj = await response.json();
+    setProgress(60);
 
     setNewMessage("");
     setRefresh("manual");
@@ -58,9 +74,17 @@ const Conversation = () => {
   useEffect(() => {
     if (refresh === "manual")
     {
+      setProgress(90);
+      // TODO fix scrolling to bottom especially on safari
       var div = document.querySelector(".conversation-list");
-      div.scrollTop = div.scrollHeight;
+        //div.scrollTop = div.scrollHeight;
+        div.scrollIntoView(false);
+      
       setRefresh(false);
+      setProgress(100);
+    }
+    if (!!conversation.conversation_id) {
+      setIsLoading(false);
     }
   }, [conversation]);
 
@@ -70,6 +94,11 @@ const Conversation = () => {
       setRefresh(false);
     }
   }, [refresh]);
+  useEffect(() => {
+    if (progress == 100) {
+      setTimeout(() => setProgress(false), 1000)
+    }
+  }, [progress])
 
   const readReceipts = useMemo(() => (
     conversation?.users?.reduce((prev, user) => {
@@ -93,6 +122,7 @@ const Conversation = () => {
           top: 64,
           bottom: "auto",
           marginBottom: "20px",
+          minHeight: "78px"
         }}
       >
         <IconButton className="back-button" size="large" onClick={() => navigate("/")}><ChevronLeft fontSize="large" /></IconButton>
@@ -111,6 +141,7 @@ const Conversation = () => {
             </Typography>
           ))}
         </React.Fragment>
+        {progress && <FastLinearProgress className="loading-bar" variant="determinate" value={progress === false ? 0 : progress} />}
       </div>
       <div className="conversation-list">
         <div className="conversation-list-scroll">
@@ -141,18 +172,18 @@ const Conversation = () => {
           fullWidth
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          autoFocus
         />
         </Slide>
         <Slide direction="up" appear in mountOnEnter unmountOnExit timeout={{enter: 500}} >
         <div className="send-button-container">
-          <Fab color="primary" aria-label="add" onClick={handleSend} disabled={newMessage.length === 0} type="submit">
+          <Fab color="primary" aria-label="add" onClick={handleSend} disabled={newMessage.length === 0 || progress === 100} type="submit">
             <Send />
           </Fab>
         </div>
         </Slide>
       </div>
       </form>
+      <Loading open={isLoading} />
     </>
   );
 };

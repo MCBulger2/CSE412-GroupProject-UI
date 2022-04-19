@@ -16,7 +16,7 @@ import "./stories.scss";
 import StoryPopover from "./StoryPopover";
 
 const StoryIcon = (props) => {
-  const { user_id, name, canPost } = props;
+  const { user_id, name, username, canPost } = props;
 
   
 

@@ -11,7 +11,8 @@ import {
   Select,
   OutlinedInput,
   MenuItem,
-  TextField
+  TextField,
+  Alert
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ import useCurrentUser from "../useCurrentUser";
 const NewConversation = (props) => {
   const { open, onClose } = props;
 
-  const friends = useApiRequest("/friend/friendee", []);
+  const friends = useApiRequest("/friend", []);
 
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ const NewConversation = (props) => {
 
   const [usernames, setUsernames] = useState([]);
   const [conversationName, setConversationName] = useState("");
+  const [error, setError] = useState(false);
 
   const handleSelectUsername = (e) => {
     const {
@@ -49,6 +51,10 @@ const NewConversation = (props) => {
             "Content-Type": "application/json"
         }
     });
+    if (!result.ok) {
+      setError("There was an issue creating the conversation.");
+      return;
+    }
     const conversation = await result.json();
 
     navigate(`/conversation/${conversation.conversation_id}`)
@@ -58,6 +64,8 @@ const NewConversation = (props) => {
     <form onSubmit={createConversation}>
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>New Conversation</DialogTitle>
+      {friends.length == 0 && <Alert severity="warning">You don't have any friends to start a conversation with.</Alert>}
+      {error && <Alert severity="error">{error}</Alert>}
       <DialogContent>
         <DialogContentText>
           Enter the name of the conversation:
@@ -95,7 +103,7 @@ const NewConversation = (props) => {
       </DialogContent>
       <DialogActions>
         <Button startIcon={<Close />} onClick={() => onClose()}>Cancel</Button>
-        <Button variant="contained" startIcon={<Send />} onClick={createConversation} type="submit">
+        <Button disabled={conversationName.length == 0 || usernames.length == 0} variant="contained" startIcon={<Send />} onClick={createConversation} type="submit">
           Create
         </Button>
       </DialogActions>

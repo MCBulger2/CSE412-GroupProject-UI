@@ -1,16 +1,17 @@
 .profile-page {
   overflow: auto;
   height: calc(100% - 55px);
+  padding-top: 15px;
 
   .profile-paper {
     padding: 20px;
     display: flex;
-    margin: 20px 200px;
+    margin: 20px 300px;
   
     .showcase {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       width: 100%;
       flex-wrap: wrap;
   
@@ -29,7 +30,13 @@
     }
   
     @media only screen and (max-width: 1000px) {
-      margin: 20px 20px;
+      margin: 20px 10px;
+    }
+  }
+
+  .login-page {
+    .login-paper {
+      margin: 0 auto;
     }
   }
 }

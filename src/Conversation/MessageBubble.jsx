@@ -5,6 +5,7 @@ import moment from "moment";
 import "./messagebubble.scss";
 import { baseUrl } from "../constants";
 import { Check } from "@mui/icons-material";
+import useCurrentUser from "../useCurrentUser";
 
 const MessageBubble = (props) => {
   const { isOutgoing, message, prevMessage, isGroupConversation, readReceipts, user_id } = props;
@@ -13,13 +14,15 @@ const MessageBubble = (props) => {
   const timestamp = moment(message.timestamp);
 
   const theme = useTheme();
-  console.log(readReceipts)
+  const actualReadReceipts = readReceipts?.filter(u => ![message.sender_id, user_id].includes(u.user_id));
+  console.log(actualReadReceipts);
+  
   return (
     <>
       {!old ||
         (Math.abs(old.diff(timestamp, "minutes")) > 1 && (
           <Typography className={"message-timestamp"}>
-            {moment(message.timestamp).format("MMMM d, h:mm A")}
+            {moment(message.timestamp).format("MMMM D, h:mm A")}
           </Typography>
         ))}
       <div
@@ -41,9 +44,9 @@ const MessageBubble = (props) => {
           <Typography className={"message-name"} variant="caption">
             {message.name}
           </Typography>
-          {readReceipts && (isGroupConversation || isOutgoing) &&
+          {actualReadReceipts?.length > 0 && (isGroupConversation || isOutgoing) &&
             <Typography className={"message-name read-receipt"} variant="caption">
-              <Check sx={{fontSize: "14px"}}/> {isGroupConversation ? `Read by ${readReceipts.map(user => user.user_id == user_id ? "Me" : user.name).join(", ")}` : "Read"}
+              <Check sx={{fontSize: "14px"}}/> {`Read by ${actualReadReceipts.map(user => user.name).join(", ")}`}
           </Typography>
           }
         </div>

@@ -20,7 +20,7 @@ import useCurrentUser from "../useCurrentUser";
 import useInterval from "../useInterval";
 
 const StoryPopover = (props) => {
-  const { user_id, name, canPost } = props;
+  const { user_id, name, username, canPost } = props;
 
   const [refresh, setRefresh] = useState(false);
   const feed = useApiRequest(`/profile/${user_id}/feed`, [], [refresh]);
@@ -78,9 +78,14 @@ const StoryPopover = (props) => {
           src={`${baseUrl}/profile/${user_id}/picture`}
           sx={{ width: 75, height: 75 }}
         />
+        <div className="name-info">
         <Typography variant="h6" className="story-popover-name">
           {name}
         </Typography>
+        <Typography variant="caption" className="story-popover-username">
+          {username}
+        </Typography>
+        </div>
       </div>
 
       {canPost && (

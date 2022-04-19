@@ -12,6 +12,7 @@ import { amber, deepOrange, grey } from "@mui/material/colors";
 import { CssBaseline, PaletteMode } from "@mui/material";
 import BottomNavigation from "./Main/BottomNavigation";
 import Profile from "./Profile/Profile";
+import Friends from "./Friends/Friends";
 
 const getDesignTokens = (mode) => ({
   components: {
@@ -83,6 +84,10 @@ const App = () => {
                 <Route
                   path="/conversation/:conversationId"
                   element={<Conversation />}
+                />
+                <Route
+                  path="/friends"
+                  element={<Friends />}
                 />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

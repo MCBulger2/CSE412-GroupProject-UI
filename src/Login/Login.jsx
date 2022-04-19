@@ -3,6 +3,7 @@ import { Paper, TextField, Typography, Button, Alert } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../constants";
+import Loading from "../Utils/Loading";
 
 import "./login.scss";
 
@@ -10,10 +11,12 @@ const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const login = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const result = await fetch(
       `${baseUrl}/auth?username=${username}&pw_hash=${password}`,
@@ -22,6 +25,7 @@ const Login = (props) => {
 
     setError(!result.ok);
     if (!result.ok) {
+      setIsLoading(false);
       return;
     }
 
@@ -85,6 +89,7 @@ const Login = (props) => {
           </div>
         </form>
       </Paper>
+      <Loading open={isLoading} />
     </div>
   );
 };

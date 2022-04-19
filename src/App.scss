@@ -1,6 +1,7 @@
 html, body, #root, .screen {
   height: 100%;
   overflow-y: hidden;
+  touch-action: none;
 }
 
 .screen {
@@ -21,10 +22,12 @@ html, body, #root, .screen {
 
   //height: 100%;
   //margin-bottom: -55px;
-  overflow: auto;
+  overflow: hidden;
 }
 
-
+h3 {
+  font-size: 34px !important;
+}
 
 ::-webkit-scrollbar {
   width: 14px;

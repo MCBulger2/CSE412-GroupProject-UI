@@ -6,6 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 
 import { createRoot } from "react-dom/client";
 
+//if (window.location.protocol == 'http:') {
+     
+//   console.log("you are accessing us via "
+//       +  "an insecure protocol (HTTP). "
+//       + "Redirecting you to HTTPS.");
+       
+//   window.location.href =
+//       window.location.href.replace(
+//                  'http:', 'https:');
+// }
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
