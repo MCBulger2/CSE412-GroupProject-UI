@@ -81,7 +81,7 @@ const Main = () => {
               friend, you can start a conversation here.
             </Alert>
           )}
-          <ConversationListings conversations={conversations} />
+          <ConversationListings conversations={conversations} user_id={user_id} />
         </div>
       </div>
       <NewConversation

@@ -32,7 +32,8 @@ const NewFriend = (props) => {
             credentials: "include"
         });
         if (!result.ok) {
-            setError("The username you entered does not exist, or you are already friends.");
+            const error = await result.text();
+            setError(error);
             return;
         }
 

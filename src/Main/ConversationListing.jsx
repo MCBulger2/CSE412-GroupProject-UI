@@ -12,7 +12,7 @@ import "./conversation.scss"
 import { baseUrl } from "../constants";
 
 const ConversationListings = (props) => {
-  const { conversations } = props;
+  const { conversations, user_id } = props;
 
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const ConversationListings = (props) => {
                 primary={conversation.name}
                 secondary={
                   <React.Fragment>
-                    {conversation?.users?.map((user, idx, convs) => (
+                    {conversation?.users?.filter(u => u.user_id !== user_id).map((user, idx, convs) => (
                       <Typography
                         className="users-label"
                         sx={{ display: "inline" }}

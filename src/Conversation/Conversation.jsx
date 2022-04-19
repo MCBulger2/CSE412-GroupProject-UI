@@ -77,9 +77,9 @@ const Conversation = () => {
       setProgress(90);
       // TODO fix scrolling to bottom especially on safari
       var div = document.querySelector(".conversation-list");
-        //div.scrollTop = div.scrollHeight;
-        div.scrollIntoView(false);
-      
+      div.scrollIntoView(false);
+      div.scrollTop = 0;
+        
       setRefresh(false);
       setProgress(100);
     }
@@ -128,7 +128,7 @@ const Conversation = () => {
         <IconButton className="back-button" size="large" onClick={() => navigate("/")}><ChevronLeft fontSize="large" /></IconButton>
         <Typography variant="h6">{conversation.name}</Typography>
         <React.Fragment>
-          {conversation?.users?.map((user, idx, convs) => (
+          {conversation?.users?.filter(u => u.user_id !== user_id).map((user, idx, convs) => (
             <Typography
               className="users-label"
               sx={{ display: "inline" }}

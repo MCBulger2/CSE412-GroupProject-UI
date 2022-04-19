@@ -9,9 +9,12 @@
     //align-items: stretch;
     flex-basis: content;
     padding-bottom: 75px;
-    padding-top: 75px; //20px;
-    margin-top: 0px; //75px;
+    margin-top: 0px;
     hyphens: auto;
+
+    .conversation-list-scroll {
+        padding-top: 80px;
+    }
 }
 
 .top-bar {
@@ -26,7 +29,7 @@
   //filter: blur(10px);
   
     background-color: #ffffff7f;
-    border: 1px solid #ffffff55;
+    //border: 1px solid #ffffff55;
 
     .back-button {
         position: absolute;
@@ -109,6 +112,17 @@
     .top-bar {
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
+
+      &.dark {
+        background-color: #15213183;
+        span {
+            color:#d3d3d3
+        }
+    }
+
+    &.light {
+        background-color: #ffffffa4;
+    }
     }
 
     .mesage-input {
