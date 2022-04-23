@@ -156,7 +156,7 @@ const StoryPopover = (props) => {
                 <ListItem alignItems="flex-start" className="conversation">
                   <ListItemText
                     primary={message.content}
-                    secondary={moment(message.timestamp).format(
+                    secondary={moment.utc(message.timestamp).format(
                       "MMMM d, h:mm A"
                     )}
                   />

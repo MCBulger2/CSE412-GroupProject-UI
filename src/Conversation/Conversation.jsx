@@ -151,6 +151,7 @@ const Conversation = () => {
                 message={message}
                 prevMessage={messages[idx - 1]}
                 isOutgoing={message.sender_id === user_id}
+                nextMessage={messages[idx + 1]}
                 isGroupConversation={conversation.users.length > 2}
                 readReceipts={readReceipts?.[message.message_id]}
                 user_id={user_id}

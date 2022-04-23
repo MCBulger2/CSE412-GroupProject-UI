@@ -47,13 +47,13 @@ const ConversationListings = (props) => {
                 navigate(`/conversation/${conversation.conversation_id}`)
               }
             >
-              {conversation.unread && <div className={"unread"} />}
+              {conversation.unread && conversation.last_message !== null && <div className={"unread"} />}
               <ListItemAvatar>
                 <Avatar
                   alt={conversation.name}
                   src={
-                    conversation.users.length == 1
-                      ? `${baseUrl}/profile/${conversation.users[0].user_id}/picture`
+                    conversation.users.filter(u => u.user_id !== user_id).length == 1
+                      ? `${baseUrl}/profile/${conversation.users.filter(u => u.user_id !== user_id)[0].user_id}/picture`
                       : ""
                   }
                 />
