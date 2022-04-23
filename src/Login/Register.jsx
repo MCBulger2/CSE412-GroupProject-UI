@@ -62,8 +62,9 @@ const Register = (props) => {
       birthday: birthday ? `${birthday.getFullYear()}-${birthday.getMonth()}-${birthday.getDate()}` : undefined,
       pw_hash: password,
       profile_picture: selectedFile
-        ? imageSrc.replace("data:image/png;base64,", "")
+        ? imageSrc.replace(/^.*;base64,/, "")
         : undefined,
+      isJpeg: !imageSrc.includes("/png;base64")
     };
     const body = JSON.stringify(obj);
     const result = await fetch(`${baseUrl}/profile`, {
