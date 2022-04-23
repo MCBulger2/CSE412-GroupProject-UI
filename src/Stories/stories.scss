@@ -63,6 +63,7 @@
     line-height: 1.1;
     text-align: center;
     margin: 5px;
+    word-break: break-all;
   }
 }
 
@@ -84,6 +85,15 @@
   margin-left: 5px;
   height: min(60%, 800px);
   overflow: hidden;
+
+  .loading-bar-story {
+    position: relative;
+    top: -19px;
+    left: 0;
+    width: calc(100% + 5px);
+    border-radius: 60px;
+    margin-bottom: -4px;
+  }
 
   .profile-picture-abs {
     position: relative;

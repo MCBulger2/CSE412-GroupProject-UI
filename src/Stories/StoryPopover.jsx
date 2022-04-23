@@ -8,6 +8,11 @@ import {
   List,
   Button,
   TextField,
+  IconButton,
+  CircularProgress,
+  Tooltip,
+  LinearProgress,
+  styled
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../constants";
@@ -18,20 +23,31 @@ import "./stories.scss";
 import { Send } from "@mui/icons-material";
 import useCurrentUser from "../useCurrentUser";
 import useInterval from "../useInterval";
+import { Close } from "@mui/icons-material";
+
+const FastLinearProgress = styled(LinearProgress)({
+  "& .MuiLinearProgress-bar": {
+    animationDuration: "0.05s"
+  }
+});
 
 const StoryPopover = (props) => {
   const { user_id, name, username, canPost } = props;
 
   const [refresh, setRefresh] = useState(false);
+  const [deleting, setDeleting] = useState([]);
+  const [progress, setProgress] = useState(false);
   const feed = useApiRequest(`/profile/${user_id}/feed`, [], [refresh]);
 
   useInterval(() => setRefresh(true), 1000 * 60);
   useEffect(() => {
     if (refresh === "manual")
     {
+      setProgress(90);
       var div = document.querySelector(".story-list");
-      div.scrollTop = 0;
+      if (div) div.scrollTop = 0;
       setRefresh(false);
+      setProgress(100);
     }
   }, [feed]);
   useEffect(() => {
@@ -39,16 +55,25 @@ const StoryPopover = (props) => {
       setRefresh(false);
     }
   }, [refresh]);
+  useEffect(() => {
+    if (progress == 100) {
+      setTimeout(() => setProgress(false), 1000)
+    }
+  }, [progress])
 
   const [newMessage, setNewMessage] = useState("");
   const { getCookie } = useCurrentUser();
 
-  const handleSend = async () => {
+  const handleSend = async (e) => {
+    e.preventDefault();
+    setProgress(30);
+
     const body = JSON.stringify({
       content: newMessage,
     });
     document.cookie = getCookie();
     console.log(document.cookie);
+
     const response = await fetch(`${baseUrl}/profile/feed/post`, {
       method: "POST",
       headers: {
@@ -58,19 +83,31 @@ const StoryPopover = (props) => {
       credentials: "include",
       cookie: getCookie(),
     });
-
+    setProgress(60);
     if (!response.ok) {
       return;
     }
 
     const obj = await response.json();
-
+    setProgress(80);
     setNewMessage("");
     setRefresh("manual");
   };
 
+  const handleDelete = async (message) => {
+    setDeleting([message.message_id, ...deleting]);
+    const response = await fetch(`${baseUrl}/profile/feed/${message.message_id}`, {
+      method: "DELETE",
+      credentials: "include",
+      cookie: getCookie(),
+    });
+
+    setRefresh(true);
+  };
+
   return (
     <>
+    {progress && <FastLinearProgress className="loading-bar-story" variant="determinate" value={progress === false ? 0 : progress} />}
       <div>
         <Avatar
           className="profile-picture-abs"
@@ -89,7 +126,8 @@ const StoryPopover = (props) => {
       </div>
 
       {canPost && (
-        <div className="mt-1">
+        <form className="mt-1 d-flex" onSubmit={handleSend}>
+          
           <TextField
             value={newMessage}
             variant="filled"
@@ -103,10 +141,12 @@ const StoryPopover = (props) => {
             endIcon={<Send />}
             disabled={newMessage.length === 0}
             onClick={handleSend}
+            type="submit"
           >
             Post
           </Button>
-        </div>
+          
+        </form>
       )}
       {feed.length > 0 ? (
         <div className={`story-list ${canPost ? "can-post" : ""}`}>
@@ -120,6 +160,12 @@ const StoryPopover = (props) => {
                       "MMMM d, h:mm A"
                     )}
                   />
+                  {deleting.includes(message.message_id) && <CircularProgress className="mr-2"/>}
+                  {canPost && <Tooltip title={"Delete Post"}>
+                  <IconButton onClick={() => handleDelete(message)} className="align-self-center">
+                      <Close />
+                  </IconButton>
+                  </Tooltip>}
                 </ListItem>
                 <Divider component="li" />
               </React.Fragment>
@@ -127,7 +173,7 @@ const StoryPopover = (props) => {
           </List>
         </div>
       ) : (
-        <Typography style={{textAlign: "center"}} variant="h6">No posts</Typography>
+        <Typography style={{textAlign: "center", paddingTop: "10px"}} variant="h6">No posts</Typography>
       )}
     </>
   );

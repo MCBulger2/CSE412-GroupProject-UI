@@ -26,7 +26,7 @@ import NewFriend from "./NewFriend";
 
 const Main = () => {
   const [refresh, setRefresh] = useState(false);
-  const conversations = useApiRequest("/conversation/all", [], [refresh]);
+  const conversations = useApiRequest("/conversation/all", null, [refresh]);
   const navigate = useNavigate();
   const { getUserId } = useCurrentUser();
   const user_id = getUserId();
@@ -47,7 +47,9 @@ const Main = () => {
       setRefresh(false);
     }
 
-    setIsLoading(false);
+    if (conversations !== null) {
+      setIsLoading(false);
+    }
   }, [conversations]);
 
   return (
@@ -68,7 +70,7 @@ const Main = () => {
                 <AddRounded />
               </IconButton>
           </div>
-          {conversations.length == 0 && (
+          {conversations?.length == 0 && (
             <Alert
               severity="info"
               action={
@@ -81,7 +83,7 @@ const Main = () => {
               friend, you can start a conversation here.
             </Alert>
           )}
-          <ConversationListings conversations={conversations} user_id={user_id} />
+          <ConversationListings conversations={conversations ?? []} user_id={user_id} />
         </div>
       </div>
       <NewConversation

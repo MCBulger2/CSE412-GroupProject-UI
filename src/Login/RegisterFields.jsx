@@ -127,7 +127,7 @@ const uploadFile = (e) => {
           variant="outlined"
         >
           Upload Profile Picture
-          <input type="file" hidden onChange={uploadFile} accept=".png" />
+          <input type="file" hidden onChange={uploadFile} accept="image/jpeg, image/png" />
         </Button>
         <Paper variant="outlined" square className="preview-paper">
           <>

@@ -52,7 +52,7 @@ const Profile = () => {
 
   const [imageSrc, setImageSrc] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { getCookie } = useCurrentUser();
 
@@ -294,6 +294,7 @@ const Profile = () => {
           Your password has been updated successfully.
         </Alert>
       </Snackbar>
+      <Loading open={isLoading} />
     </>
   );
 };

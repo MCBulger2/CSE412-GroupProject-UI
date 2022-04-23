@@ -24,16 +24,19 @@ import NewFriend from "../Main/NewFriend";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
 import useInterval from "../useInterval";
+import Loading from "../Utils/Loading";
 
 import "./friends.scss";
 
 const Friends = () => {
   const [addFriendOpen, setAddFriendOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
-  const inPending = useApiRequest("/friend/pending/in", [], [refresh]);
-  const outPending = useApiRequest("/friend/pending/out", [], [refresh]);
+  const inPending = useApiRequest("/friend/pending/in", null, [refresh]);
+  const outPending = useApiRequest("/friend/pending/out", null, [refresh]);
   const friends = useApiRequest("/friend", [], [refresh]);
 
   const { getCookie } = useCurrentUser();
@@ -65,6 +68,10 @@ const Friends = () => {
     if (refresh === true) {
       setRefresh(false);
     }
+
+    if (inPending !== null && outPending !== null && friends !== null) {
+      setIsLoading(false);
+    }
   }, [inPending, outPending, friends]);
 
   return (
@@ -79,7 +86,7 @@ const Friends = () => {
       >
         Send Friend Request
       </Button>
-      {(inPending.length > 0 || outPending.length > 0) && (
+      {(inPending?.length > 0 || outPending?.length > 0) && (
         <>
           <Typography variant="h5">Pending Friend Requests</Typography>
           <Typography variant="h6">Incoming</Typography>
@@ -125,12 +132,12 @@ const Friends = () => {
           </List>
           <Typography variant="h6">Outgoing</Typography>
           <List>
-            {outPending.length == 0 && (
+            {outPending?.length == 0 && (
               <Alert severity="info">
                 You don't have any outgoing friend requests.
               </Alert>
             )}
-            {outPending.map((pendingFriend) => (
+            {outPending?.map((pendingFriend) => (
               <React.Fragment key={pendingFriend.user_id}>
                 <ListItem>
                   <ListItemAvatar>
@@ -164,7 +171,7 @@ const Friends = () => {
 
       <Typography variant="h5">Your Friends</Typography>
       <List>
-        {friends.length == 0 && (
+        {friends?.length == 0 && (
           <Alert
             severity="info"
             action={
@@ -174,7 +181,7 @@ const Friends = () => {
             It looks like you don't have any friends...yet!
           </Alert>
         )}
-        {friends.map((friend) => (
+        {friends?.map((friend) => (
           <React.Fragment key={friend.user_id}>
             <ListItem>
               <ListItemAvatar>
@@ -211,6 +218,7 @@ const Friends = () => {
           setRefresh(true);
         }}
       />
+      <Loading open={isLoading} />
     </div>
   );
 };
