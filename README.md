@@ -4,7 +4,7 @@
 1) [Quickstart](#quickstart)
 2) [Installation](#installation)
 4) [Startup](#startup)
-5) [Screens](#screens)
+5) [Build](#build)
 
 # Quickstart
 The following manual outlines how to build a local version of the UI, but **you don't need to do that** to start using the application. To visit the hosted version of this application, visit 
@@ -42,16 +42,11 @@ To start the UI in HTTPS mode (on port 3001), use the command:
 
 `npm start`
 
-## Screens
+## Build
+while the [Startup](#startup) proceduces are good for local development and testing, when deploying to the production server, you want to create an optimized build, which is more responsive, a smaller size.
 
-### Login
+Run the following command to build the UI:
 
-### Home
+`npm run build`
 
-### New Friend
-
-### New Conversation
-
-### Conversation
-
-### Profile
+When it completes, there will be a new `build` folder in the root of the project. The contents of this folder can be hosted will any normal webserver, like Nginx (which is what we are using in production), Apache, or the Node.js `serve` package.
