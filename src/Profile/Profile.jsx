@@ -35,18 +35,18 @@ import "./profile.scss";
 const Profile = () => {
   const navigate = useNavigate();
 
+  // Control when snackbars/loading are displayed
+  const {state} = useLocation();
+  const [profileUpdated, setProfileUpdated] = useState(state?.profileUpdated ?? false);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Get the current user to load their profile
   const { getUserId, getCookie } = useCurrentUser();
   const user_id = getUserId();
 
   // Get the full user account info
   const user = useApiRequest(`/profile/${user_id}`, {}, [profileUpdated, passwordUpdated]);
-
-  // Control when snackbars/loading are displayed
-  const {state} = useLocation();
-  const [profileUpdated, setProfileUpdated] = useState(state?.profileUpdated ?? false);
-  const [passwordUpdated, setPasswordUpdated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   // User entered fields/errors
   const [name, setName] = useState("");

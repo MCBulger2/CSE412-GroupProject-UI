@@ -13,12 +13,12 @@ import { baseUrl } from "../constants";
 import { Close } from "@mui/icons-material";
 import Confirmation from "./Confirmation";
 import useCurrentUser from "../useCurrentUser";
-import { IconButton, Snackbar } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 
 /**
  * Displays a list of all of the current user's conversations
- * @param {*} props 
- * @returns 
+ * @param {*} props
+ * @returns
  */
 const ConversationListings = (props) => {
   const { conversations, user_id } = props;
@@ -57,13 +57,20 @@ const ConversationListings = (props) => {
                 navigate(`/conversation/${conversation.conversation_id}`)
               }
             >
-              {conversation.unread && conversation.last_message !== null && <div className={"unread"} />}
+              {conversation.unread && conversation.last_message !== null && (
+                <div className={"unread"} />
+              )}
               <ListItemAvatar>
                 <Avatar
                   alt={conversation.name}
                   src={
-                    conversation.users.filter(u => u.user_id !== user_id).length == 1
-                      ? `${baseUrl}/profile/${conversation.users.filter(u => u.user_id !== user_id)[0].user_id}/picture`
+                    conversation.users.filter((u) => u.user_id !== user_id)
+                      .length == 1
+                      ? `${baseUrl}/profile/${
+                          conversation.users.filter(
+                            (u) => u.user_id !== user_id
+                          )[0].user_id
+                        }/picture`
                       : ""
                   }
                 />
@@ -89,14 +96,17 @@ const ConversationListings = (props) => {
                   </React.Fragment>
                 }
               />
-              <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedConversation(conversation);
-                }}
-              >
-                <Close />
-              </IconButton>
+              <Tooltip title="Delete Conversation">
+                <IconButton
+                  className="align-self-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedConversation(conversation);
+                  }}
+                >
+                  <Close />
+                </IconButton>
+              </Tooltip>
             </ListItem>
             <Divider
               variant="inset"
@@ -108,9 +118,16 @@ const ConversationListings = (props) => {
       </List>
       <Confirmation
         open={!!selectedConversation}
-        conversation={selectedConversation}
         onClose={() => setSelectedConversation(null)}
         callback={handleDeleteConversation}
+        content={() => (
+          <>
+            Are you sure you want to delete conversation{" "}
+            <i>"{selectedConversation?.name}"</i>? Deleting it will{" "}
+            <b>permanently</b> delete all messages for every user in the
+            conversation.
+          </>
+        )}
       />
     </div>
   );

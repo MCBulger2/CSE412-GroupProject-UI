@@ -25,7 +25,7 @@ const StoryIcon = (props) => {
   };
 
   /**
-   * Clear the anchorEl when closing the popup
+   * Clear the anchorEl when closing the popupp
    */
   const handleClose = () => {
     anchorEl.className = anchorEl.className.replace("anchorEl", "");
