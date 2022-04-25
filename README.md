@@ -52,10 +52,7 @@ Run the following command to build the UI:
 When it completes, there will be a new `build` folder in the root of the project. The contents of this folder can be hosted will any normal webserver, like Nginx (which is what we are using in production), Apache, or the Node.js `serve` package.
 
 # Application Demo
-## Login Screen
-
-
-## Toggle Light & Dark Mode
+## Login Screen (Light & Dark Mode)
 
 
 ## Registration Page
