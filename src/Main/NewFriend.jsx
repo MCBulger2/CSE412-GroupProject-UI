@@ -15,6 +15,11 @@ import { baseUrl } from "../constants";
 import useApiRequest from "../useApiRequest";
 import useCurrentUser from "../useCurrentUser";
 
+/**
+ * Displays a dialog for sending a friend request to a certain user
+ * @param {*} props 
+ * @returns {Element}
+ */
 const NewFriend = (props) => {
   const { open, onClose } = props;
 
@@ -22,6 +27,9 @@ const NewFriend = (props) => {
   const [error, setError] = useState(false);
   const { getCookie } = useCurrentUser();
 
+  /**
+   * Send a friend request to the specified username
+   */
   const befriend = async () => {
     const result = await fetch(`${baseUrl}/friend/befriend/${username}`, {
       method: "POST",

@@ -24,23 +24,33 @@ import "./main.scss";
 import NewConversation from "./NewConversation";
 import NewFriend from "./NewFriend";
 
+/**
+ * The home page of the application that contains Stories and ConversationListing
+ * @returns 
+ */
 const Main = () => {
+  // Get all of the user's conversations
   const [refresh, setRefresh] = useState(false);
   const conversations = useApiRequest("/conversation/all", null, [refresh]);
+
+  const [newConverationOpen, setNewConversationOpen] = useState(false); // Open modal to create conversation
+  const [addFriendOpen, setAddFriendOpen] = useState(false); // Open modal to add new friend (now unused)
+  const [isLoading, setIsLoading] = useState(true); // If true, show full page loading (initial load)
+
   const navigate = useNavigate();
+
+  // Get the current user_id to make sure the user is still logged in
   const { getUserId } = useCurrentUser();
   const user_id = getUserId();
 
+  // Make sure the user is logged in. If they aren't, redirect them to the login page
   useEffect(() => {
     if (!user_id) {
       navigate("/login");
     }
   }, [user_id]);
 
-  const [newConverationOpen, setNewConversationOpen] = useState(false);
-  const [addFriendOpen, setAddFriendOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
+  // Automatically the list of conversations every 20s (so we can display the notification bubbles)
   useInterval(() => setRefresh(true), 20000);
   useEffect(() => {
     if (refresh === true) {

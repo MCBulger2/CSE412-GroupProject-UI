@@ -25,20 +25,27 @@ import useCurrentUser from "../useCurrentUser";
 import useInterval from "../useInterval";
 import { Close } from "@mui/icons-material";
 
+// Get a loading bar with a faster animation
 const FastLinearProgress = styled(LinearProgress)({
   "& .MuiLinearProgress-bar": {
     animationDuration: "0.05s"
   }
 });
 
+/**
+ * Display a single user's story in a popover
+ * @param {*} props 
+ * @returns {Element}
+ */
 const StoryPopover = (props) => {
   const { user_id, name, username, canPost } = props;
 
   const [refresh, setRefresh] = useState(false);
   const [deleting, setDeleting] = useState([]);
   const [progress, setProgress] = useState(false);
-  const feed = useApiRequest(`/profile/${user_id}/feed`, [], [refresh]);
+  const feed = useApiRequest(`/profile/${user_id}/feed`, [], [refresh]); // Get the user's story
 
+  // Automatically refresh the selected story every minute
   useInterval(() => setRefresh(true), 1000 * 60);
   useEffect(() => {
     if (refresh === "manual")
@@ -64,6 +71,10 @@ const StoryPopover = (props) => {
   const [newMessage, setNewMessage] = useState("");
   const { getCookie } = useCurrentUser();
 
+  /**
+   * Post a new message to your story
+   * @param {Event} e
+   */
   const handleSend = async (e) => {
     e.preventDefault();
     setProgress(30);
@@ -72,7 +83,6 @@ const StoryPopover = (props) => {
       content: newMessage,
     });
     document.cookie = getCookie();
-    console.log(document.cookie);
 
     const response = await fetch(`${baseUrl}/profile/feed/post`, {
       method: "POST",
@@ -94,6 +104,11 @@ const StoryPopover = (props) => {
     setRefresh("manual");
   };
 
+  /**
+   * Delete the specified message from your story
+   * @param {Object} message 
+   * @param {number} message.message_id
+   */
   const handleDelete = async (message) => {
     setDeleting([message.message_id, ...deleting]);
     const response = await fetch(`${baseUrl}/profile/feed/${message.message_id}`, {

@@ -15,13 +15,23 @@ import Confirmation from "./Confirmation";
 import useCurrentUser from "../useCurrentUser";
 import { IconButton, Snackbar } from "@mui/material";
 
+/**
+ * Displays a list of all of the current user's conversations
+ * @param {*} props 
+ * @returns 
+ */
 const ConversationListings = (props) => {
   const { conversations, user_id } = props;
 
-  const [selectedConversation, setSelectedConversation] = useState(null);
-  const navigate = useNavigate();
+  const [selectedConversation, setSelectedConversation] = useState(null); // The conversation to delete (if any)
+
+  const navigate = useNavigate(); // Get navigate function to redirect to conversation page
+
   const { getCookie } = useCurrentUser();
 
+  /**
+   * After confirming the deletion, this function actually deletes the conversation
+   */
   const handleDeleteConversation = async () => {
     const result = await fetch(
       `${baseUrl}/conversation/${selectedConversation.conversation_id}`,

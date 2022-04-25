@@ -28,17 +28,27 @@ import Loading from "../Utils/Loading";
 
 import "./profile.scss";
 
+/**
+ * Displays the Profile page, where you can post to your story, or update your profile/password.
+ * @returns 
+ */
 const Profile = () => {
-  const { getUserId } = useCurrentUser();
+  const navigate = useNavigate();
+
+  // Get the current user to load their profile
+  const { getUserId, getCookie } = useCurrentUser();
   const user_id = getUserId();
 
-  const {state} = useLocation();
-  console.log(state);
-  const [profileUpdated, setProfileUpdated] = useState(state?.profileUpdated ?? false);
-  const [passwordUpdated, setPasswordUpdated] = useState(false);
-
+  // Get the full user account info
   const user = useApiRequest(`/profile/${user_id}`, {}, [profileUpdated, passwordUpdated]);
 
+  // Control when snackbars/loading are displayed
+  const {state} = useLocation();
+  const [profileUpdated, setProfileUpdated] = useState(state?.profileUpdated ?? false);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // User entered fields/errors
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -48,16 +58,14 @@ const Profile = () => {
   const [error, setError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  const navigate = useNavigate();
-
+  // Fields for 
   const [imageSrc, setImageSrc] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const { getCookie } = useCurrentUser();
-
+  // When the account info is loaded from the API
   useEffect(() => {
-    if (user.user_id) {
+    if (user.user_id) { // loading was successful
+      // Reinitialize fields with new data
       setIsLoading(false);
       setName(user.name);
       setUsername(user.username);
@@ -65,21 +73,22 @@ const Profile = () => {
       setNewPassword("");
       setRepeatPassword("");
 
+      // Format birthday
       const bday = user?.birthday?.split("-");
       if (bday?.length == 3) setBirthday(new Date(bday[0], bday[1], bday[2]));
+
+      // Format profile picture
       setImageSrc(`${baseUrl}/profile/${user.user_id}/picture`);
-      console.log(imageSrc);
       setSelectedFile("Current");
     }
   }, [user]);
 
+  /**
+   * Update the account info (except for password)
+   * @param {Event} e
+   */
   const update = async (e) => {
     e.preventDefault();
-
-    // let file;
-    // if (selectedFile) {
-    //   const [file, og] = await getFile(selectedFile);
-    // }
 
     if (name.length < 1) {
       setError("Please enter a name.");
@@ -124,6 +133,10 @@ const Profile = () => {
     //setProfileUpdated(true);
   };
 
+  /**
+   * Update the current password
+   * @param {Event} e
+   */
   const updatePassword = async (e) => {
     e.preventDefault();
 

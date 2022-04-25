@@ -12,6 +12,11 @@ import Switch from "./Switch";
 import "./titlebar.scss";
 import { baseUrl } from "../constants";
 
+/**
+ * Display the Title bar containg the login/logout link, light/dark mode switch, and logged in user
+ * @param {*} props 
+ * @returns {Element}
+ */
 const TitleBar = (props) => {
   const {
     mode,
@@ -20,11 +25,14 @@ const TitleBar = (props) => {
 
   let navigate = useNavigate();
 
+  // Get current user account info
   const { getUserId, getUsername, clearUser, getCookie } = useCurrentUser();
-
   const user_id = getUserId();
   const username = getUsername();
 
+  /**
+   * Log out of the current account and redirect the login page
+   */
   const logout = async () => {
     fetch(`${baseUrl}/auth/logout`, {
       credentials: "include",

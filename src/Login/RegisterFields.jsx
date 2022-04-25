@@ -15,38 +15,59 @@ import "./login.scss";
 
 const MAX_IMAGE_SIZE = 4; // max image size in megabytes
 
+/**
+ * Component containing the fields to Register/Update a profile
+ * @param {*} props
+ * @returns
+ */
 const RegisterFields = (props) => {
-  const { hidePassword,
-    name, setName,
-    username, setUsername,
-    password, setPassword,
-    repeatPassword, setRepeatPassword,
-    birthday, setBirthday,
+  const {
+    hidePassword,
+    name,
+    setName,
+    username,
+    setUsername,
+    password,
+    setPassword,
+    repeatPassword,
+    setRepeatPassword,
+    birthday,
+    setBirthday,
     setError,
     error,
     selectedFile,
     imageSrc,
     setSelectedFile,
     setImageSrc,
-    shrink
-} = props;
+    shrink,
+  } = props;
 
-const theme = useTheme();
+  const theme = useTheme(); // Get theme for dark mode
 
-const getFile = async (file) => {
+  /**
+   * Fetches the selected file to send to the API and display the preview
+   * @param {string} file - the name of the selected file
+   * @returns the encoded file 
+   */
+  const getFile = async (file) => {
     return new Promise((resolve, reject) => {
       var fileReader = new FileReader();
       fileReader.onload = () => {
         resolve([
           fileReader.result.replace("data:image/png;base64,", ""),
           fileReader.result,
-        ])
+        ]);
       };
       fileReader.readAsDataURL(file);
     });
   };
 
-const uploadFile = (e) => {
+  /**
+   * Upload a profile picture and validate its format
+   * @param {*} e 
+   * @returns 
+   */
+  const uploadFile = (e) => {
     const file = e.target.files[0];
     if (file.size > 1048576 * MAX_IMAGE_SIZE) {
       setError("Profile pictures must be under 4MB.");
@@ -55,11 +76,12 @@ const uploadFile = (e) => {
     setSelectedFile(file);
   };
 
+  // If the selected file is "Current", it means its coming from the API, so use that image source instead
   useEffect(() => {
     if (selectedFile && selectedFile !== "Current") {
       getFile(selectedFile).then(([file, og]) => setImageSrc(og));
     }
-  }, [selectedFile])
+  }, [selectedFile]);
 
   return (
     <>
@@ -127,7 +149,12 @@ const uploadFile = (e) => {
           variant="outlined"
         >
           Upload Profile Picture
-          <input type="file" hidden onChange={uploadFile} accept="image/jpeg, image/png" />
+          <input
+            type="file"
+            hidden
+            onChange={uploadFile}
+            accept="image/jpeg, image/png"
+          />
         </Button>
         <Paper variant="outlined" square className="preview-paper">
           <>
@@ -137,7 +164,9 @@ const uploadFile = (e) => {
               sx={{ width: 75, height: 75 }}
             />
             <Typography variant="caption" component="div" className="d-block">
-              {imageSrc ? (selectedFile?.name || selectedFile) : "No file selected"}
+              {imageSrc
+                ? selectedFile?.name || selectedFile
+                : "No file selected"}
             </Typography>
           </>
         </Paper>

@@ -7,15 +7,25 @@ import Loading from "../Utils/Loading";
 
 import "./login.scss";
 
+/**
+ * Displays the Login page, where you can enter a username and password to login
+ * @param {*} props 
+ * @returns 
+ */
 const Login = (props) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [username, setUsername] = useState(""); // Currently entered username
+  const [password, setPassword] = useState(""); // Currently entered password
+  const [error, setError] = useState(false); // If not false, displays the error in a banner
+  const [isLoading, setIsLoading] = useState(false); // If true, loading animation is played
+  
+  const navigate = useNavigate(); // Get navigate function so we can redirect to home page on successful login
 
+  /**
+   * Attempts to log the user in with the entered credentials
+   * @param {Event} e - click/submit event
+   */
   const login = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page refresh when hitting enter key
     setIsLoading(true);
 
     const result = await fetch(

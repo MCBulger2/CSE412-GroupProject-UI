@@ -11,42 +11,56 @@ import { baseUrl } from "../constants";
 import useInterval from "../useInterval";
 import Loading from "../Utils/Loading";
 
+// Create a custom Loading bar that animates faster than normal
 const FastLinearProgress = styled(LinearProgress)({
   "& .MuiLinearProgress-bar": {
     animationDuration: "0.1s"
   }
 });
 
+/**
+ * Displays all the messages in a single conversation in order
+ * @returns {Element}
+ */
 const Conversation = () => {
+  // Get the ID of the conversation from the URL
   let { conversationId } = useParams();
 
-  const theme = useTheme();
+  // Get function to navigate to new page
   const navigate = useNavigate();
 
-  const [newMessage, setNewMessage] = useState("");
-  const [refresh, setRefresh] = useState(false);
+  // Get application theme (for dark mode)
+  const theme = useTheme();
 
-  const [progress, setProgress] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [newMessage, setNewMessage] = useState(""); // The currently typed message
+  const [refresh, setRefresh] = useState(false); // If true, refetches the conversation
+  const [progress, setProgress] = useState(false); // false or 0-100, determines if loading bar is showing
+  const [isLoading, setIsLoading] = useState(true); // determines if full page loading is happening (initial load)
 
+  // Get the current conversation from the URL parameter. Reload whenever "refresh" changes
   const conversation = useApiRequest(`/conversation/${conversationId}`, {}, [
     refresh,
   ]);
 
+  // Get current user info (to get cookie and user_id)
   const { getUserId, getCookie } = useCurrentUser();
   const user_id = getUserId();
 
+  /**
+   * Sends a message in the current conversation
+   * @param {Event} e - the click/submit event
+   */
   const handleSend = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload when pressing enter key
     setProgress(20);
     setNewMessage("");
 
+    // Craft and send request to API
     const body = JSON.stringify({
       conversation_id: conversation.conversation_id,
       content: newMessage,
     });
     document.cookie = getCookie();
-    console.log(document.cookie);
     setProgress(30);
     const response = await fetch(`${baseUrl}/conversation/send`, {
       method: "POST",
@@ -59,18 +73,22 @@ const Conversation = () => {
     });
     setProgress(40);
 
+    // If there was an error
     if (!response.ok) {
       setProgress(false);
       return;
     }
 
+    // If we get here the message was sent successfully
     const obj = await response.json();
     setProgress(60);
 
+    // Refresh the conversation
     setNewMessage("");
     setRefresh("manual");
   };
 
+  // When the API request to get the conversation resolves, this runs
   useEffect(() => {
     if (refresh === "manual")
     {
@@ -83,23 +101,29 @@ const Conversation = () => {
       setRefresh(false);
       setProgress(100);
     }
+
+    // If the conversation loaded properly, turn off loading screen (for initial load)
     if (!!conversation.conversation_id) {
       setIsLoading(false);
     }
   }, [conversation]);
 
+  // Reload the conversation on a regular interval
   useInterval(() => setRefresh(true), 20000);
   useEffect(() => {
     if (refresh === true) {
       setRefresh(false);
     }
   }, [refresh]);
+
+  // When the progress bar gets to 100, reset it back to false after 1s
   useEffect(() => {
     if (progress == 100) {
       setTimeout(() => setProgress(false), 1000)
     }
   }, [progress])
 
+  // Get the readReceipts for all users in the conversation
   const readReceipts = useMemo(() => (
     conversation?.users?.reduce((prev, user) => {
       if (!user.read_receipt) return prev;
@@ -112,7 +136,7 @@ const Conversation = () => {
       return newVal;
     }, {})
   ), [conversation, conversation?.users]);
-  console.log(readReceipts);
+
   return (
     <>
       <div

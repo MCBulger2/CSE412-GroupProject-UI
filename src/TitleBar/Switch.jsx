@@ -1,7 +1,11 @@
-//https://mui.com/material-ui/react-switch/#main-content
+//
 import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
 
+/**
+ * Create a styled MUI switch switch special icons for the light/dark mode switch
+ * Adapted from MUI library documentation: https://mui.com/material-ui/react-switch/#main-content
+ */
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,

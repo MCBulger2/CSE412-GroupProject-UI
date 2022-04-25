@@ -1,12 +1,7 @@
 import {
   Avatar,
   Typography,
-  Popover,
-  Divider,
-  ListItemText,
-  ListItem,
-  List,
-  Button,
+  Popover
 } from "@mui/material";
 import React, { useState } from "react";
 import { baseUrl } from "../constants";
@@ -18,15 +13,20 @@ import StoryPopover from "./StoryPopover";
 const StoryIcon = (props) => {
   const { user_id, name, username, canPost } = props;
 
-  
+  const [anchorEl, setAnchorEl] = useState(null); // Determine where to position the story popup
 
-  const [anchorEl, setAnchorEl] = useState(null);
-
+  /**
+   * Set the calling element as the anchor element for the popup
+   * @param {Event} event 
+   */
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     event.currentTarget.className += "anchorEl ";
   };
 
+  /**
+   * Clear the anchorEl when closing the popup
+   */
   const handleClose = () => {
     anchorEl.className = anchorEl.className.replace("anchorEl", "");
     setAnchorEl(null);

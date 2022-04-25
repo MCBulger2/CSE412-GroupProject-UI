@@ -15,25 +15,30 @@ import "./login.scss";
 import RegisterFields from "./RegisterFields";
 
 const Register = (props) => {
+  // All of the user entered fields
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [birthday, setBirthday] = useState(undefined);
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading]=  useState(false);
-  const navigate = useNavigate();
 
-  const [imageSrc, setImageSrc] = useState("Current");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState(false); // If not false displays the error in a banner
+  const [isLoading, setIsLoading]=  useState(false); // If true display the loading screen
 
+  const navigate = useNavigate(); // Get navigate function so we can redirect back to login screen
+
+  // Fields for profile picture
+  const [imageSrc, setImageSrc] = useState("Current"); // file name
+  const [selectedFile, setSelectedFile] = useState(null); // actual base64 image data
+
+  /**
+   * Attempt to register a new account with the entered form values
+   * @param {Event} e 
+   */
   const register = async (e) => {
     e.preventDefault();
 
-    // let file;
-    // if (selectedFile) {
-    //   const [file, og] = await getFile(selectedFile);
-    // }
+    // Perform client-side validation on the inputs and display an error if necessary
 
     if (name.length < 1) {
       setError("Please enter a name.");
@@ -55,6 +60,7 @@ const Register = (props) => {
       return;
     }
 
+    // No validation errors, send request to API
     setIsLoading(true);
     const obj = {
       username,
@@ -76,6 +82,7 @@ const Register = (props) => {
       },
     });
 
+    // API encountered errors, display error message
     if (!result.ok) {
       setError(
         "There was an issue creating your account. Please choose a unique username."
@@ -84,6 +91,7 @@ const Register = (props) => {
       return;
     }
 
+    // Registration was successful, redirect to login page
     const user = await result.json();
     navigate("/login");
   };

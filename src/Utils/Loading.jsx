@@ -1,6 +1,11 @@
 import { Backdrop, CircularProgress } from "@mui/material";
 import React from "react";
 
+/**
+ * Displays a full-screen circular loading animation
+ * @param {*} props 
+ * @returns 
+ */
 const Loading = (props) => {
   const { open } = props;
 

@@ -6,8 +6,13 @@ import "./stories.scss";
 import { Alert, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Display the list of all of the current user's friend's stories
+ * @returns {Element}
+ */
 const Stories = () => {
 
+    // Get all of your current friends
     const friends = useApiRequest("/friend", []);
     const navigate = useNavigate();
 

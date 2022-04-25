@@ -28,18 +28,29 @@ import Loading from "../Utils/Loading";
 
 import "./friends.scss";
 
+/**
+ * Displays the list of incoming, outgoing, and current friends.
+ * You can also use this to add a new friend
+ * @returns {Element}
+ */
 const Friends = () => {
-  const [addFriendOpen, setAddFriendOpen] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [addFriendOpen, setAddFriendOpen] = useState(false); // Control if the modal is open
+  const [refresh, setRefresh] = useState(false); // When this changes the API request refetches
+  const [isLoading, setIsLoading] = useState(true); // Control when whole page loading screen is open
 
   const navigate = useNavigate();
 
+  // Get the incoming, outgoing, and current friends
   const inPending = useApiRequest("/friend/pending/in", null, [refresh]);
   const outPending = useApiRequest("/friend/pending/out", null, [refresh]);
   const friends = useApiRequest("/friend", [], [refresh]);
 
   const { getCookie } = useCurrentUser();
+
+  /**
+   * Accept an incoming friend request
+   * @param {number} user_id 
+   */
   const acceptRequest = async (user_id) => {
     const res = await fetch(`${baseUrl}/friend/accept/${user_id}`, {
       credentials: "include",
@@ -51,6 +62,10 @@ const Friends = () => {
     setRefresh(true);
   };
 
+  /**
+   * Remove a current friend
+   * @param {number} user_id 
+   */
   const removeFriend = async (user_id) => {
     const res = await fetch(`${baseUrl}/friend/defriend/${user_id}`, {
         method: "DELETE",
@@ -63,6 +78,7 @@ const Friends = () => {
     setRefresh(true);
   };
 
+  // Automatically refresh the Friends lists once per minute
   useInterval(() => setRefresh(true), 1000*60);
   useEffect(() => {
     if (refresh === true) {

@@ -14,7 +14,6 @@ const useApiRequest = (apiPath, defaultValue, deps = []) => {
         });
         const obj = await response.json()
         setObj(obj);
-        console.log(obj);
     };
 
     useEffect(() => {

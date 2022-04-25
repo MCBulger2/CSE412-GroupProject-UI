@@ -14,6 +14,7 @@ import BottomNavigation from "./Main/BottomNavigation";
 import Profile from "./Profile/Profile";
 import Friends from "./Friends/Friends";
 
+// Create the MUI theme for the entire application (used for special dark mode styles)
 const getDesignTokens = (mode) => ({
   components: {
     MuiBottomNavigation: {
@@ -50,10 +51,12 @@ const getDesignTokens = (mode) => ({
   },
 });
 
+// Create a Context so that any component in the application can see the theme state
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const App = () => {
-  const [mode, setMode] = useState(localStorage.getItem("theme_mode") ?? "dark");
+  // Switch between light and dark mode
+  const [mode, setMode] = useState(localStorage.getItem("theme_mode") ?? "dark"); // Default to dark mode
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method
@@ -64,6 +67,7 @@ const App = () => {
     []
   );
 
+  // Store whether the user is in light/dark mode whenever the user changes it so it persists across sessions
   useEffect(() => {
     localStorage.setItem("theme_mode", mode);
   }, [mode]);

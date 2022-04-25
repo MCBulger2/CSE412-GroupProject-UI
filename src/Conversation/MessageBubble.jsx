@@ -7,20 +7,25 @@ import { baseUrl } from "../constants";
 import { Check } from "@mui/icons-material";
 import useCurrentUser from "../useCurrentUser";
 
+/**
+ * Displays a single message in a conversation
+ * @param {*} props 
+ * @returns {Element}
+ */
 const MessageBubble = (props) => {
   const { isOutgoing, message, prevMessage, nextMessage, isGroupConversation, readReceipts, user_id } = props;
 
+  // Get the time difference between this message and the next/previous messages
+  // The difference will be used to determine whether to display the timestamp, and control spacing between messages
   const old = moment(prevMessage?.timestamp);
   const timestamp = moment(message.timestamp);
   const next = moment(nextMessage?.timestamp);
   const timeDiff = Math.abs(old.diff(timestamp, "minutes"))
   const timeDiffSeconds = Math.abs(old.diff(timestamp, "seconds"))
-
   const nextTimeDiffSeconds = Math.abs(next.diff(timestamp, "seconds"))
 
-  const theme = useTheme();
-  const actualReadReceipts = readReceipts?.filter(u => ![message.sender_id, user_id].includes(u.user_id));
-  console.log(actualReadReceipts);
+  const theme = useTheme(); // Get theme for dark mode
+  const actualReadReceipts = readReceipts?.filter(u => ![message.sender_id, user_id].includes(u.user_id)); // Filter yourself from read receipts
   
   return (
     <>
