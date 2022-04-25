@@ -171,8 +171,8 @@ const StoryPopover = (props) => {
                 <ListItem alignItems="flex-start" className="conversation">
                   <ListItemText
                     primary={message.content}
-                    secondary={moment.utc(message.timestamp).format(
-                      "MMMM d, h:mm A"
+                    secondary={moment.utc(message.timestamp).local().subtract(1, "hours").format(
+                      "MMMM D, h:mm A"
                     )}
                   />
                   {deleting.includes(message.message_id) && <CircularProgress className="mr-2"/>}

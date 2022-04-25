@@ -32,7 +32,7 @@ const MessageBubble = (props) => {
     {prevMessage && <div style={{marginTop: `min(calc(1px * ${(Math.ceil(timeDiffSeconds / 10) * 10) / 10}), 75px)`}}/>}
       {(!prevMessage || timeDiff > 5) && (
           <Typography className={"message-timestamp"}>
-            {moment.utc(message.timestamp).format("MMMM D, h:mm A")}
+            {moment.utc(message.timestamp).local().subtract(1, "hours").format("MMMM D, h:mm A")}
           </Typography>
         )}
       <div
