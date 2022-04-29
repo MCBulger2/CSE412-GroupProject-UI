@@ -53,24 +53,25 @@ When it completes, there will be a new `build` folder in the root of the project
 
 # Application Demo
 ## Login Screen (Light & Dark Mode)
-
+###### Insert GIF
 
 ## Registration Page
-
+###### Insert GIF
 
 ## Home Page
-
+###### Insert GIF
 
 ## Adding Friends
-
+###### Insert GIF
 
 ## Creating Individual & Group Conversations
-
+###### Insert GIF
 
 ## Deleting Conversations
-
+###### Insert GIF
 
 ## Viewing/Posting Stories
-
+###### Insert GIF
 
 ## Updating Profile
+###### Insert GIF
