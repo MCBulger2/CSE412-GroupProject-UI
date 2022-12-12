@@ -1,15 +1,22 @@
 # CSE 412 Group Project - UI
 
 # Table of Contents
-1) [Quickstart](#quickstart)
-2) [Installation](#installation)
+1) [About](#about)
+2) [API](#api)
+3) [Installation](#installation)
 4) [Startup](#startup)
 5) [Build](#build)
 
-# Quickstart
-The following manual outlines how to build a local version of the UI, but **you don't need to do that** to start using the application. To visit the hosted version of this application, visit 
+## About
+This project is an instant messaging application written using React, which allows you to create an account, send friend requests to other users, and start a conversation (either a private message, or a group thread).
 
-### [https://cse412.mattbulger.me](https://cse412.mattbulger.me)
+![](images/image7.png)
+![](images/image16.png)
+
+## API
+The backend API for this project (a Flask application written in Python) can be found here:
+
+### [https://github.com/MCBulger2/CSE412-GroupProject-API](https://github.com/MCBulger2/CSE412-GroupProject-API)
 
 ## Installation
 
@@ -53,25 +60,26 @@ When it completes, there will be a new `build` folder in the root of the project
 
 # Application Demo
 ## Login Screen (Light & Dark Mode)
-###### Insert GIF
+![](images/image5.png)
 
 ## Registration Page
-###### Insert GIF
+![](images/image14.png)
 
 ## Home Page
-###### Insert GIF
+![](images/image4.png)
 
 ## Adding Friends
-###### Insert GIF
+![](images/image21.png)
+![](images/image27.png)
 
 ## Creating Individual & Group Conversations
-###### Insert GIF
+![](images/image10.png)
 
 ## Deleting Conversations
-###### Insert GIF
+![](images/image6.png)
 
 ## Viewing/Posting Stories
-###### Insert GIF
+![](images/image25.png)
 
 ## Updating Profile
-###### Insert GIF
+![](images/image24.png)
