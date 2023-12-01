@@ -50,7 +50,7 @@ To start the UI in HTTPS mode (on port 3001), use the command:
 `npm start`
 
 ## Build
-while the [Startup](#startup) proceduces are good for local development and testing, when deploying to the production server, you want to create an optimized build, which is more responsive, a smaller size.
+While the [Startup](#startup) proceduces are good for local development and testing, when deploying to the production server, you want to create an optimized build, which is more responsive, a smaller size.
 
 Run the following command to build the UI:
 
